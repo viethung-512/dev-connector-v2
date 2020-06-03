@@ -2,6 +2,8 @@ const config = require('config');
 const jwt = require('jsonwebtoken');
 const gravatar = require('gravatar');
 
+const firebaseConfig = require('../../config/firebaseConfig');
+
 const generateToken = payload => {
   const jwtSecret = config.get('jwtSecret');
   const expiresIn = '1h';
@@ -21,4 +23,66 @@ const generateDefaultAvatar = email => {
   return avatar;
 };
 
-module.exports = { generateToken, generateDefaultAvatar };
+const generateImageFileName = imageFileName => {
+  const imageExtension = imageFileName.split('.')[
+    imageFileName.split('.').length - 1
+  ];
+  const randomString = Math.round(Math.random() * 1000000000000).toString();
+
+  return `${randomString}.${imageExtension}`;
+};
+
+const getDownloadUrl = (path, imageFilename) => {
+  const folder = path.replace('/', '%2F');
+  const downloadUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${folder}%2F${imageFilename}?alt=media`;
+
+  return downloadUrl;
+};
+
+const prepareProfileData = body => {
+  const {
+    company,
+    website,
+    location,
+    bio,
+    status,
+    githubUsername,
+    skills,
+    youtube,
+    facebook,
+    twitter,
+    instagram,
+    linkedin,
+  } = body;
+
+  // Build profile object
+  const profileFields = {};
+
+  if (company) profileFields.company = company;
+  if (website) profileFields.website = website;
+  if (location) profileFields.location = location;
+  if (bio) profileFields.bio = bio;
+  if (status) profileFields.status = status;
+  if (githubUsername) profileFields.githubUsername = githubUsername;
+  if (skills) {
+    profileFields.skills = skills.split(',').map(skill => skill.trim());
+  }
+
+  // Build social object
+  profileFields.social = {};
+  if (youtube) profileFields.social.youtube = youtube;
+  if (twitter) profileFields.social.twitter = twitter;
+  if (facebook) profileFields.social.facebook = facebook;
+  if (linkedin) profileFields.social.linkedin = linkedin;
+  if (instagram) profileFields.social.instagram = instagram;
+
+  return profileFields;
+};
+
+module.exports = {
+  generateToken,
+  generateDefaultAvatar,
+  prepareProfileData,
+  getDownloadUrl,
+  generateImageFileName,
+};

@@ -1,4 +1,4 @@
-const { check, validationResult } = require('express-validator');
+const { check } = require('express-validator');
 const { validateMessage } = require('../constants');
 
 const checkLoginRequiredField = [
@@ -35,18 +35,7 @@ const checkRegisterRequiredField = [
   }),
 ];
 
-const validate = (req, res, next) => {
-  const error = validationResult(req);
-
-  if (!error.isEmpty()) {
-    return res.status(400).json({ error: error.mapped() });
-  }
-
-  return next();
-};
-
 module.exports = {
   checkLoginRequiredField,
   checkRegisterRequiredField,
-  validate,
 };
