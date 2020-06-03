@@ -1,0 +1,6 @@
+{
+  "mongoURL": "mongodb+srv://bang:ngoduviethung@dev-connector-sn6en.mongodb.net/dev-connector?retryWrites=true&w=majority",
+  "jwtSecret": "viethung512",
+  "githubClientId": "41b9be27dd8810ac3c9e",
+  "githubSecret": "2a3bc51e4b6c4613c08c9e34bcd350af2cf481a1"
+}
