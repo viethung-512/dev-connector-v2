@@ -1,13 +1,17 @@
 import React from 'react';
 import './style.css';
 import UnAuthMenu from '../UnAuthMenu/UnAuthMenu';
+import AuthMenu from '../AuthMenu/AuthMenu';
 
 function MainMenu({ authenticated, login, register }) {
-  authenticated = false;
+  authenticated = true;
   return (
     <div className='main-menu--lg'>
       {authenticated ? (
-        <div>auth</div>
+        <AuthMenu
+          authUser={{ name: 'test', avatar: 'test' }}
+          logout={() => console.log('logout')}
+        />
       ) : (
         <UnAuthMenu login={login} register={register} />
       )}

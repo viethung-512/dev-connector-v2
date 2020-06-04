@@ -1,0 +1,44 @@
+.homepage {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  background-image: url('/assets/showcase.jpg');
+}
+
+.overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.homepage__title {
+  font-size: 64px !important;
+  line-height: 64px !important;
+  color: #fff !important;
+
+  margin-bottom: 24px !important;
+}
+
+.homepage__description {
+  font-size: 24px;
+  color: #fff;
+  line-height: 24px;
+
+  margin-bottom: 12px;
+}
+
+.homepage__button {
+  font-size: 24px;
+  height: 50px;
+}
