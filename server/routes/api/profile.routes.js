@@ -33,7 +33,7 @@ router.post(
 );
 router.get('/', getAllProfile);
 router.get('/user/:userId', getProfileByUser);
-router.delete('/', auth, deleteProfile);
+router.put('/', auth, deleteProfile);
 router.post('/me/upload', auth, collectObjectField, uploadProfileImage);
 
 router.get('/github/:username', getGithubRepositories);

@@ -21,7 +21,7 @@ const {
 router.post('/', auth, checkPostRequiredFields, validate, createPost);
 router.get('/', auth, getAllPost);
 router.get('/:postId', auth, getPostById);
-router.delete('/:postId', auth, deletePost);
+router.put('/:postId', auth, deletePost);
 router.put('/like/:postId', auth, likePost);
 router.put('/unlike/:postId', auth, unlikePost);
 router.post(

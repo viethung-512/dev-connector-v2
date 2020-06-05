@@ -2,6 +2,7 @@ import {
   ASYNC_ACTION_START,
   ASYNC_ACTION_FINISH,
   ASYNC_ACTION_ERROR,
+  ASYNC_ACTION_CLEAR,
 } from './async.constants';
 
 const asyncReducerInitialState = {
@@ -23,6 +24,7 @@ const asyncReducer = (state = asyncReducerInitialState, { type, payload }) => {
         errors: null,
       };
     case ASYNC_ACTION_FINISH:
+    case ASYNC_ACTION_CLEAR:
       return asyncReducerInitialState;
     case ASYNC_ACTION_ERROR:
       return {

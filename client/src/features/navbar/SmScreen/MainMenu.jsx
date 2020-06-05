@@ -3,18 +3,30 @@ import './style.css';
 import UnAuthMenu from '../UnAuthMenu/UnAuthMenu';
 import AuthMenu from '../AuthMenu/AuthMenu';
 
-function MainMenu({ authenticated, login, register }) {
-  authenticated = true;
+function MainMenu({
+  authenticated,
+  login,
+  register,
+  logout,
+  authUser,
+  closeMenuMobile,
+}) {
   return (
     <div className='main-menu--sm'>
       {authenticated ? (
         <AuthMenu
           mobile={true}
-          authUser={{ name: 'test', avatar: 'test' }}
-          logout={() => console.log('logout')}
+          authUser={authUser}
+          logout={logout}
+          closeMenuMobile={closeMenuMobile}
         />
       ) : (
-        <UnAuthMenu login={login} register={register} mobile={true} />
+        <UnAuthMenu
+          login={login}
+          register={register}
+          mobile={true}
+          closeMenuMobile={closeMenuMobile}
+        />
       )}
     </div>
   );

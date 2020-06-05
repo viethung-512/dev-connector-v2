@@ -3,7 +3,11 @@ const Post = require('../models/Post');
 
 const getAllPost = async (req, res, next) => {
   try {
-    const posts = await Post.find().sort({ date: -1 });
+    let posts = await Post.find()
+      .sort({ date: -1 })
+      .populate('user', ['name', 'avatar'])
+      .populate('comments.user', ['name', 'avatar']);
+    posts = posts.filter(post => post.enabled);
 
     return res.json({ posts });
   } catch (err) {
@@ -15,9 +19,11 @@ const getAllPost = async (req, res, next) => {
 const getPostById = async (req, res, next) => {
   const { postId } = req.params;
   try {
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId)
+      .populate('user', ['name', 'avatar'])
+      .populate('comments.user', ['name', 'avatar']);
 
-    if (!post) {
+    if (!post || !post.enabled) {
       return next({ status: 404, message: 'Post not found' });
     }
 
@@ -42,7 +48,10 @@ const createPost = async (req, res, next) => {
       user: authUserId,
     });
 
-    const post = await newPost.save();
+    let post = await newPost.save();
+    post = await Post.findById(post.id)
+      .populate('user', ['name', 'avatar'])
+      .populate('comments.user', ['name', 'avatar']);
 
     return res.json({ post });
   } catch (err) {
@@ -56,7 +65,7 @@ const deletePost = async (req, res, next) => {
   try {
     const post = await Post.findById(postId);
 
-    if (!post) {
+    if (!post || !post.enabled) {
       return next({ status: 400, message: 'Post not found' });
     }
 
@@ -64,7 +73,7 @@ const deletePost = async (req, res, next) => {
       return next({ status: 403, message: 'User not authorized' });
     }
 
-    await post.remove();
+    await Post.findByIdAndUpdate(postId, { enabled: false });
 
     return res.json({
       general: { mgs: 'Post removed' },
@@ -82,7 +91,7 @@ const likePost = async (req, res, next) => {
   const { postId } = req.params;
 
   try {
-    const post = await Post.findById(postId);
+    let post = await Post.findById(postId);
 
     if (post.likes.find(like => like.user.toString() === req.user.id)) {
       return next({ status: 400, message: 'Post already liked' });
@@ -91,6 +100,10 @@ const likePost = async (req, res, next) => {
     post.likes.unshift({ user: req.user.id });
 
     await post.save();
+
+    post = await Post.findById(post.id)
+      .populate('user', ['name', 'avatar'])
+      .populate('comments.user', ['name', 'avatar']);
 
     return res.json({ post });
   } catch (err) {
@@ -106,7 +119,7 @@ const unlikePost = async (req, res, next) => {
   const { postId } = req.params;
 
   try {
-    const post = await Post.findById(postId);
+    let post = await Post.findById(postId);
 
     if (!post.likes.find(like => like.user.toString() === req.user.id)) {
       return next({ status: 400, message: "Post haven't been liked yet" });
@@ -118,6 +131,10 @@ const unlikePost = async (req, res, next) => {
     post.likes = newLikes;
 
     await post.save();
+
+    post = await Post.findById(post.id)
+      .populate('user', ['name', 'avatar'])
+      .populate('comments.user', ['name', 'avatar']);
 
     return res.json({ post });
   } catch (err) {
@@ -135,7 +152,7 @@ const commentOnPost = async (req, res, next) => {
 
   try {
     const user = await User.findById(userId).select('-password');
-    const post = await Post.findById(postId);
+    let post = await Post.findById(postId);
 
     const newComment = {
       text: req.body.text,
@@ -148,6 +165,10 @@ const commentOnPost = async (req, res, next) => {
 
     await post.save();
 
+    post = await Post.findById(post.id)
+      .populate('user', ['name', 'avatar'])
+      .populate('comments.user', ['name', 'avatar']);
+
     return res.json({ post });
   } catch (err) {
     console.error(err.name);
@@ -158,9 +179,9 @@ const commentOnPost = async (req, res, next) => {
 const deleteComment = async (req, res, next) => {
   const { postId, commentId } = req.params;
   try {
-    const post = await Post.findById(postId);
+    let post = await Post.findById(postId);
 
-    if (!post) {
+    if (!post || !post.enabled) {
       return next({ status: 400, message: 'Post not found' });
     }
 
@@ -179,6 +200,10 @@ const deleteComment = async (req, res, next) => {
     post.comments = comments;
 
     await post.save();
+
+    post = await Post.findById(post.id)
+      .populate('user', ['name', 'avatar'])
+      .populate('comments.user', ['name', 'avatar']);
 
     return res.json({ post });
   } catch (err) {

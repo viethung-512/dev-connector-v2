@@ -9,10 +9,16 @@ const { prepareProfileData } = require('../utils/helper');
 
 const createUpdateProfile = async (req, res, next) => {
   const profileData = prepareProfileData(req.body);
-  profileData.user = req.user.id;
 
   try {
-    let profile = await Profile.findOne({ user: req.user.id });
+    const user = await User.findById(req.user.id);
+
+    if (!user || !user.enabled) {
+      return next({ status: 400, message: 'User not found' });
+    }
+
+    profileData.user = req.user.id;
+    let profile = await Profile.findOne({ user: req.user.id, enabled: true });
 
     if (profile) {
       profile = await Profile.findOneAndUpdate(
@@ -34,6 +40,11 @@ const createUpdateProfile = async (req, res, next) => {
     profile = new Profile(profileData);
     await profile.save();
 
+    profile = await Profile.findById(profile.id).populate('user', [
+      'name',
+      'avatar',
+    ]);
+
     return res.json({ profile });
   } catch (err) {
     console.log(err);
@@ -45,9 +56,10 @@ const deleteProfile = async (req, res, next) => {
   const authId = req.user.id;
 
   try {
-    await Post.deleteMany({ user: authId }); // remove post of profile
-    await Profile.findOneAndRemove({ user: authId }); // remove profile
-    await User.findOneAndRemove({ _id: authId }); // remove user
+    await User.findByIdAndUpdate(authId, { enabled: false });
+    await Profile.findOneAndUpdate({ user: authId }, { enabled: false });
+    // await Profile.findOneAndDelete({ user: authId });
+    // await User.findByIdAndDelete(authId);
 
     return res.json({ msg: 'User deleted' });
   } catch (err) {
@@ -61,14 +73,23 @@ const uploadProfileImage = async (req, res, next) => {
   const authUserId = req.user.id;
 
   try {
-    const user = await User.findByIdAndUpdate(authUserId, { avatar: imageUrl });
-    const profile = await Profile.findOne({
-      user: user.id,
+    await User.findByIdAndUpdate(authUserId, { avatar: imageUrl });
+    let profile = await Profile.findOne({
+      user: authUserId,
     }).populate('user', ['name', 'avatar']);
 
     if (!profile) {
       return next({ status: 404, message: 'Profile not found' });
     }
+
+    const newPhotos = [imageUrl, ...profile.photos];
+    await Post.updateMany({ user: authUserId }, { avatar: imageUrl });
+    profile = await Profile.findOneAndUpdate(
+      { user: authUserId },
+      { photos: newPhotos }
+    );
+
+    profile = await Profile.findOne({ user: authUserId });
 
     return res.json({ profile });
   } catch (err) {
@@ -79,7 +100,8 @@ const uploadProfileImage = async (req, res, next) => {
 
 const getAllProfile = async (req, res, next) => {
   try {
-    const profiles = await Profile.find().populate('user', ['name', 'avatar']);
+    let profiles = await Profile.find().populate('user', ['name', 'avatar']);
+    profiles = profiles.filter(profile => profile.enabled);
 
     return res.json({ profiles });
   } catch (err) {
@@ -90,11 +112,17 @@ const getAllProfile = async (req, res, next) => {
 
 const getAuthProfile = async (req, res, next) => {
   try {
+    const user = await User.findById(req.user.id);
+
+    if (!user || !user.enabled) {
+      return next({ status: 400, message: 'User not found' });
+    }
+
     const profile = await Profile.findOne({
       user: req.user.id,
     }).populate('user', ['name', 'avatar']);
 
-    if (!profile) {
+    if (!profile || !profile.enabled) {
       return next({
         status: 400,
         message: 'There is no profile for this user ',
@@ -115,7 +143,7 @@ const getProfileByUser = async (req, res, next) => {
       'name',
       'avatar',
     ]);
-    if (!profile) {
+    if (!profile || !profile.enabled) {
       return next({ status: 404, message: 'Profile not found' });
     }
 

@@ -2,13 +2,13 @@ import React from 'react';
 import { Typography } from 'antd';
 import { BranchesOutlined } from '@ant-design/icons';
 import ExperienceForm from '../../profile/ExperienceForm';
-import ModalBase from './ModalBase';
+import DrawerBase from './DrawerBase';
 
 const { Text } = Typography;
 
-function ModalExperience(props) {
+function ExperienceAction(props) {
   return (
-    <ModalBase
+    <DrawerBase
       title='Add An Experience'
       description={
         <Text>
@@ -18,8 +18,8 @@ function ModalExperience(props) {
       }
     >
       <ExperienceForm />
-    </ModalBase>
+    </DrawerBase>
   );
 }
 
-export default ModalExperience;
+export default ExperienceAction;

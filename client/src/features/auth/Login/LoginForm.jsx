@@ -5,7 +5,7 @@ import { Form, Input, Button, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { openModal } from '../../modal/modal.actions';
 import { login } from '../auth.actions';
-import { asyncActionFinish } from '../../async/async.actions';
+import { asyncActionClear } from '../../async/async.actions';
 
 const { Text } = Typography;
 
@@ -14,11 +14,13 @@ function LoginForm(props) {
   const history = useHistory();
   const [form] = Form.useForm();
 
-  const { loading, errors } = useSelector(state => state.async);
+  const { loading, errors, type } = useSelector(state => state.async);
 
   useEffect(() => {
+    dispatch(asyncActionClear());
+
     return () => {
-      dispatch(asyncActionFinish());
+      dispatch(asyncActionClear());
     };
 
     // eslint-disable-next-line
@@ -33,6 +35,11 @@ function LoginForm(props) {
     dispatch(login(userCredentials, history));
   };
   const signUp = () => dispatch(openModal('Register'));
+
+  const loginLoading = type === 'login' ? loading : false;
+  const getAuthProfileLoading = type === 'getProfile' ? loading : false;
+
+  const loginFormLoading = loginLoading || getAuthProfileLoading;
 
   return (
     <Form form={form} onFinish={handleSubmit} autoComplete='off'>
@@ -53,13 +60,8 @@ function LoginForm(props) {
         <Input.Password prefix={<LockOutlined />} placeholder='Your password' />
       </Form.Item>
       {errors && (
-        <Form.Item style={{ marginBottom: 12 }}>
-          {errors.length > 0 &&
-            errors.map(({ msg }, index) => (
-              <Text type='danger' key={index}>
-                {msg}
-              </Text>
-            ))}
+        <Form.Item style={{ marginBottom: 12, textAlign: 'center' }}>
+          <Text type='danger'>{errors.general.msg}</Text>
         </Form.Item>
       )}
       <Form.Item>
@@ -67,7 +69,7 @@ function LoginForm(props) {
           type='primary'
           style={{ width: '100%' }}
           htmlType='submit'
-          loading={loading}
+          loading={loginFormLoading}
         >
           Login
         </Button>

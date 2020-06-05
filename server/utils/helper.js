@@ -40,30 +40,11 @@ const getDownloadUrl = (path, imageFilename) => {
 };
 
 const prepareProfileData = body => {
-  const {
-    company,
-    website,
-    location,
-    bio,
-    status,
-    githubUsername,
-    skills,
-    youtube,
-    facebook,
-    twitter,
-    instagram,
-    linkedin,
-  } = body;
+  const { skills, youtube, facebook, twitter, instagram, linkedin } = body;
 
   // Build profile object
-  const profileFields = {};
+  const profileFields = { ...body };
 
-  if (company) profileFields.company = company;
-  if (website) profileFields.website = website;
-  if (location) profileFields.location = location;
-  if (bio) profileFields.bio = bio;
-  if (status) profileFields.status = status;
-  if (githubUsername) profileFields.githubUsername = githubUsername;
   if (skills) {
     profileFields.skills = skills.split(',').map(skill => skill.trim());
   }

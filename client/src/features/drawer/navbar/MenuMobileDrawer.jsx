@@ -4,15 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { closeDrawer } from '../drawer.actions';
 import MainMenu from '../../navbar/SmScreen/MainMenu';
 import { openModal } from '../../modal/modal.actions';
-// import { logout } from '../../auth/auth.actions';
-// import { openModal } from '../../modal/modal.actions';
+import { logout } from '../../auth/auth.actions';
 
 function MenuMobileDrawer(props) {
   const dispatch = useDispatch();
   const { authenticated, user } = useSelector(state => state.auth);
 
   const closeMenuMobile = () => dispatch(closeDrawer());
-  // const handleLogout = () => dispatch(logout());
+  const handleLogout = () => dispatch(logout());
   const handleRegister = () => {
     dispatch(openModal('Register'));
     dispatch(closeDrawer());
@@ -33,7 +32,7 @@ function MenuMobileDrawer(props) {
         authUser={user}
         authenticated={authenticated}
         closeMenuMobile={closeMenuMobile}
-        // logout={handleLogout}
+        logout={handleLogout}
         register={handleRegister}
         login={handleLogin}
       />

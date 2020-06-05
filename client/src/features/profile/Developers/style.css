@@ -1,0 +1,72 @@
+.developers-page__header {
+  margin-bottom: 12px;
+}
+
+.developers-page__header-title {
+  color: var(--primary-color) !important;
+}
+
+.developers-page__header-subtitle {
+  font-size: 16px !important;
+}
+
+.profile__header-title {
+  margin-bottom: 0 !important;
+}
+
+.profile__header-subtitle {
+  margin-bottom: 18px;
+  display: block;
+  font-weight: 400;
+}
+
+.profile__skills-item {
+  display: block !important;
+  color: var(--primary-color) !important;
+}
+
+@media (max-width: 750px) {
+  .skills {
+    display: none !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .developers-page__header-title {
+    font-size: 30px !important;
+    text-align: center;
+  }
+
+  .developers-page__header-subtitle {
+    text-align: center;
+    display: block;
+    width: 100%;
+  }
+
+  .avatar {
+    padding: 0;
+    margin: 0 !important;
+  }
+
+  .profile {
+    display: flex;
+    flex-direction: column !important;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .profile .ant-card-meta-avatar {
+    padding: 0 !important;
+  }
+
+  .profile__header {
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  .profile__description {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+}

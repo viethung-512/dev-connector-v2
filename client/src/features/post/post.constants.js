@@ -1,0 +1,9 @@
+export const SET_CURRENT_POST = 'SET_CURRENT_POST';
+export const SET_POSTS = 'SET_POSTS';
+export const CLEAR_POST = 'CLEAR_POST';
+export const CREATE_POST = 'CREATE_POST';
+export const LIKE_POST = 'LIKE_POST';
+export const UNLIKE_POST = 'UNLIKE_POST';
+export const DELETE_POST = 'DELETE_POST';
+export const COMMENT_ON_POST = 'COMMENT_ON_POST';
+export const DELETE_COMMENT = 'DELETE_COMMENT';

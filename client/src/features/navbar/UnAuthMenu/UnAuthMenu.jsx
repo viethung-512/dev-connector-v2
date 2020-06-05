@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Menu } from 'antd';
 
-function UnAuthMenu({ mobile = false, register, login }) {
+function UnAuthMenu({ mobile = false, register, login, closeMenuMobile }) {
   const menuClassName = mobile ? 'menubar--sm' : 'menubar--lg';
   const menuItemClassName = mobile ? 'menubar-item--sm' : 'menubar-item--lg';
   const menuItemLinkClassName = mobile
@@ -11,7 +11,11 @@ function UnAuthMenu({ mobile = false, register, login }) {
 
   return (
     <Menu className={menuClassName} mode={mobile ? 'vertical' : 'horizontal'}>
-      <Menu.Item className={menuItemClassName} key='developer'>
+      <Menu.Item
+        className={menuItemClassName}
+        key='developer'
+        onClick={closeMenuMobile}
+      >
         <NavLink
           to='/developers'
           className={menuItemLinkClassName}

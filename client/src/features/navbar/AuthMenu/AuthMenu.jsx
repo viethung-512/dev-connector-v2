@@ -3,9 +3,11 @@ import './style.css';
 import { NavLink, Link } from 'react-router-dom';
 import { Menu, Dropdown, Avatar, Typography } from 'antd';
 import { LogoutOutlined, ProfileOutlined } from '@ant-design/icons';
+import { defaultImages, defaultName } from '../../../app/utils/config';
 
-function AuthMenu({ mobile = false, authUser, logout }) {
-  const { name = '', avatar = '' } = authUser;
+function AuthMenu({ mobile = false, authUser, logout, closeMenuMobile }) {
+  const { name = defaultName.USER, avatar = defaultImages.USER } = authUser;
+
   const menuClassName = mobile ? 'menubar--sm' : 'menubar--lg';
   const menuItemClassName = mobile ? 'menubar-item--sm' : 'menubar-item--lg';
   const menuItemLinkClassName = mobile
@@ -14,7 +16,11 @@ function AuthMenu({ mobile = false, authUser, logout }) {
 
   const useMenu = (
     <Menu mode='vertical'>
-      <Menu.Item key='profile' icon={<ProfileOutlined />}>
+      <Menu.Item
+        key='profile'
+        icon={<ProfileOutlined />}
+        onClick={closeMenuMobile}
+      >
         <Link to='/profile/me'>
           <Typography.Text>My Profile</Typography.Text>
         </Link>
@@ -25,12 +31,12 @@ function AuthMenu({ mobile = false, authUser, logout }) {
     </Menu>
   );
   return (
-    <Menu
-      className={menuClassName}
-      mode={mobile ? 'vertical' : 'horizontal'}
-      defaultSelectedKeys='posts'
-    >
-      <Menu.Item className={menuItemClassName} key='developer'>
+    <Menu className={menuClassName} mode={mobile ? 'vertical' : 'horizontal'}>
+      <Menu.Item
+        className={menuItemClassName}
+        key='developer'
+        onClick={closeMenuMobile}
+      >
         <NavLink
           to='/developers'
           className={menuItemLinkClassName}
@@ -39,7 +45,11 @@ function AuthMenu({ mobile = false, authUser, logout }) {
           Developers
         </NavLink>
       </Menu.Item>
-      <Menu.Item className={menuItemClassName} key='posts'>
+      <Menu.Item
+        className={menuItemClassName}
+        key='posts'
+        onClick={closeMenuMobile}
+      >
         <NavLink
           to='/posts'
           className={menuItemLinkClassName}
@@ -48,7 +58,11 @@ function AuthMenu({ mobile = false, authUser, logout }) {
           Posts
         </NavLink>
       </Menu.Item>
-      <Menu.Item className={menuItemClassName} key='dashboard'>
+      <Menu.Item
+        className={menuItemClassName}
+        key='dashboard'
+        onClick={closeMenuMobile}
+      >
         <NavLink
           to='/dashboard'
           className={menuItemLinkClassName}
@@ -57,7 +71,11 @@ function AuthMenu({ mobile = false, authUser, logout }) {
           Dashboard
         </NavLink>
       </Menu.Item>
-      <Menu.Item className={menuItemClassName} key='auth'>
+      <Menu.Item
+        className={menuItemClassName}
+        key='auth'
+        style={mobile ? null : { color: '#fff' }}
+      >
         <Dropdown overlay={useMenu} trigger={['click', 'hover']}>
           <span className='auth-menu'>
             <Avatar src={avatar} alt={name} className='avatar' />

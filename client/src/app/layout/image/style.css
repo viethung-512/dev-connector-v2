@@ -1,0 +1,29 @@
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 12px;
+
+  border: 5px dashed rgba(0, 0, 0, 0.05);
+}
+
+.dropzone.dropzone--active {
+  border-color: green;
+}
+
+.upload-icon {
+  font-size: 32px;
+}
+
+.upload-title {
+  margin-top: 12px !important;
+}
+
+.preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}

@@ -5,8 +5,8 @@ import drawerReducer from '../../features/drawer/drawer.reducer';
 import modalReducer from '../../features/modal/modal.reducer';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 import authReducer from '../../features/auth/auth.reducer';
-// import profileReducer from '../../features/profile/profile.reducer';
-// import postReducer from '../../features/post/post.reducer';
+import profileReducer from '../../features/profile/profile.reducer';
+import postReducer from '../../features/post/post.reducer';
 
 export default combineReducers({
   async: asyncReducer,
@@ -14,6 +14,6 @@ export default combineReducers({
   modal: modalReducer,
   toastr: toastrReducer,
   auth: authReducer,
-  // profile: profileReducer,
-  // post: postReducer,
+  profile: profileReducer,
+  post: postReducer,
 });

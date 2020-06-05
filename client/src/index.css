@@ -2,3 +2,17 @@
   --primary-color: #17a2b8;
   --dark-color: #343a40;
 }
+
+.btn.btn--dark {
+  background-color: var(--dark-color);
+  color: #fff;
+}
+
+.btn.btn--dark:hover,
+.btn.btn--dark:active,
+.btn.btn--dark:focus {
+  background-color: var(--dark-color);
+  border: unset;
+  opacity: 0.8;
+  color: #fff;
+}

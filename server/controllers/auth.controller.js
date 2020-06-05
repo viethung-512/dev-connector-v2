@@ -9,7 +9,7 @@ const login = async (req, res, next) => {
   try {
     let user = await User.findOne({ email });
 
-    if (!user) {
+    if (!user || !user.enabled) {
       return next({
         status: 400,
         message: 'Wrong credentials, please try again',
@@ -97,8 +97,8 @@ const getAuthUser = async (req, res, next) => {
   try {
     const user = await User.findById(userId).select('-password');
 
-    if (!user) {
-      return next({ status: 403, message: 'User not found' });
+    if (!user || !user.enabled) {
+      return next({ status: 404, message: 'User not found' });
     }
 
     return res.json({ user });

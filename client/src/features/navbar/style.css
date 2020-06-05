@@ -52,6 +52,12 @@
   color: #fff;
 }
 
+.menubar-item--lg {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
 .menubar-item--lg,
 .menubar-item--lg:hover,
 .menubar-item-link--active {
@@ -61,6 +67,11 @@
 .menubar-item-link--lg {
   color: #fff !important;
 }
+
+.menubar-item-link--lg.menubar-item-link--active {
+  color: var(--primary-color) !important;
+}
+
 .menubar-item-link--lg:hover {
   color: var(--primary-color) !important;
 }

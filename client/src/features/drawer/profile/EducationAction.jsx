@@ -2,13 +2,13 @@ import React from 'react';
 import { Typography } from 'antd';
 import EducationForm from '../../profile/EducationForm';
 import { EduIcon } from '../../../app/layout/common/Icons';
-import ModalBase from './ModalBase';
+import DrawerBase from './DrawerBase';
 
 const { Text } = Typography;
 
-function ModalEducation(props) {
+function EducationAction(props) {
   return (
-    <ModalBase
+    <DrawerBase
       title='Add Your Education'
       description={
         <Text>
@@ -17,8 +17,8 @@ function ModalEducation(props) {
       }
     >
       <EducationForm />
-    </ModalBase>
+    </DrawerBase>
   );
 }
 
-export default ModalEducation;
+export default EducationAction;

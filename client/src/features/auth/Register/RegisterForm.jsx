@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Button, Typography } from 'antd';
 import { openModal } from '../../modal/modal.actions';
 import { register } from '../auth.actions';
-import { asyncActionFinish } from '../../async/async.actions';
+import { asyncActionClear } from '../../async/async.actions';
 
 const { Text } = Typography;
 
@@ -15,8 +15,10 @@ function RegisterForm(props) {
   const { loading, errors } = useSelector(state => state.async);
 
   useEffect(() => {
+    dispatch(asyncActionClear());
+
     return () => {
-      dispatch(asyncActionFinish());
+      dispatch(asyncActionClear());
     };
 
     // eslint-disable-next-line
@@ -72,13 +74,8 @@ function RegisterForm(props) {
         <Input.Password placeholder='Re-enter your password' />
       </Form.Item>
       {errors && (
-        <Form.Item style={{ marginBottom: 12 }}>
-          {errors.length > 0 &&
-            errors.map(({ msg }, index) => (
-              <Text type='danger' key={index}>
-                {msg}
-              </Text>
-            ))}
+        <Form.Item style={{ marginBottom: 12, textAlign: 'center' }}>
+          <Text type='danger'>{errors.general.msg}</Text>
         </Form.Item>
       )}
       <Form.Item>

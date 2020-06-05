@@ -2,16 +2,12 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import ModalLogin from './auth/ModalLogin';
 import ModalRegister from './auth/ModalRegister';
-// import ModalExperience from './profile/ModalExperience';
-// import ModalEducation from './profile/ModalEducation';
-// import ModalProfileAction from './profile/Actions';
+import UploadImage from './profile/UploadImage';
 
 const modalLookup = {
   Login: ModalLogin,
   Register: ModalRegister,
-  // ModalExperience,
-  // ModalEducation,
-  // ModalProfileAction,
+  UploadProfileImage: UploadImage,
 };
 
 function ModalManger(props) {

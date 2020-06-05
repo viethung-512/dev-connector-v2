@@ -2,6 +2,7 @@ import {
   ASYNC_ACTION_START,
   ASYNC_ACTION_FINISH,
   ASYNC_ACTION_ERROR,
+  ASYNC_ACTION_CLEAR,
 } from './async.constants';
 
 export const asyncActionStart = (actionType, elmId) => ({
@@ -15,3 +16,5 @@ export const asyncActionError = err => ({
   type: ASYNC_ACTION_ERROR,
   payload: { err },
 });
+
+export const asyncActionClear = () => ({ type: ASYNC_ACTION_CLEAR });

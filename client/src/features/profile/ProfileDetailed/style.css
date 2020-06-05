@@ -1,0 +1,35 @@
+/* Github repos */
+.github-repos__title,
+.github-repos__title-icon {
+  color: var(--primary-color) !important;
+}
+
+.github-item__title {
+  color: var(--primary-color) !important;
+  margin-bottom: 0 !important;
+}
+
+.github-tags {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.github-tag {
+  width: 84px;
+  text-align: center;
+  color: #fff;
+  margin-right: 0 !important;
+}
+
+.github-tag--stars {
+  background-color: var(--primary-color) !important;
+}
+
+.github-tag--watchers {
+  background-color: var(--dark-color) !important;
+}
+
+.github-tag--forks {
+  color: var(--dark-color) !important;
+}

@@ -28,6 +28,7 @@ const ProfileSchema = new mongoose.Schema({
   githubUsername: {
     type: String,
   },
+  photos: [String],
   experience: [
     {
       title: {
@@ -107,6 +108,10 @@ const ProfileSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now(),
+  },
+  enabled: {
+    type: Boolean,
+    default: true,
   },
 });
 

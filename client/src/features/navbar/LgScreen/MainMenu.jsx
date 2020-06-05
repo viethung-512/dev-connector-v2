@@ -3,15 +3,11 @@ import './style.css';
 import UnAuthMenu from '../UnAuthMenu/UnAuthMenu';
 import AuthMenu from '../AuthMenu/AuthMenu';
 
-function MainMenu({ authenticated, login, register }) {
-  authenticated = true;
+function MainMenu({ authenticated, login, register, authUser, logout }) {
   return (
     <div className='main-menu--lg'>
       {authenticated ? (
-        <AuthMenu
-          authUser={{ name: 'test', avatar: 'test' }}
-          logout={() => console.log('logout')}
-        />
+        <AuthMenu authUser={authUser} logout={logout} />
       ) : (
         <UnAuthMenu login={login} register={register} />
       )}

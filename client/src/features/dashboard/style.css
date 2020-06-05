@@ -1,0 +1,9 @@
+.dashboard-header__title {
+  color: var(--primary-color) !important;
+}
+
+@media (max-width: 750px) {
+  .dashboard-container__title {
+    font-size: 24px !important;
+  }
+}

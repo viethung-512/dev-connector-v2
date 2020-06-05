@@ -1,17 +1,21 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Typography } from 'antd';
-import ModalBase from './ModalBase';
+import ProfileActionsForm from '../../profile/ProfileActionForm';
+import DrawerBase from './DrawerBase';
 import { UserIcon } from '../../../app/layout/common/Icons';
-import ProfileAction from '../../profile/ProfileAction';
 
 const { Text } = Typography;
 
-function Actions(props) {
-  const profile = useSelector(state => state.profile.current);
+function ProfileActions(props) {
+  const profile = useSelector(({ drawer }) =>
+    drawer && drawer.drawerProps && drawer.drawerProps.profile
+      ? drawer.drawerProps.profile
+      : null
+  );
 
   return (
-    <ModalBase
+    <DrawerBase
       title={profile ? 'Update your profile' : 'Create your profile'}
       description={
         <Text>
@@ -19,9 +23,9 @@ function Actions(props) {
         </Text>
       }
     >
-      <ProfileAction />
-    </ModalBase>
+      <ProfileActionsForm profile={profile} />
+    </DrawerBase>
   );
 }
 
-export default Actions;
+export default ProfileActions;
