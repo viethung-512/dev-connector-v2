@@ -22,9 +22,9 @@ export const formatRowData = dataSource =>
 
 export const setDefaultAxios = () => {
   const token = localStorage.getItem('token');
-  const PORT = process.env.PORT || 5000;
+  // const PORT = process.env.PORT || 5000;
 
-  axios.defaults.baseURL = `http://localhost:${PORT}/api`;
+  // axios.defaults.baseURL = `http://localhost:${PORT}/api`;
   axios.defaults.headers.post['Content-Type'] = 'application/json';
 
   if (token) {
