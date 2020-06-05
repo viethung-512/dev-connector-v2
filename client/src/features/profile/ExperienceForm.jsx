@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form, Button, Input, DatePicker, Space, Checkbox } from 'antd';
 import { addExperience } from './profile.actions';
 import { closeModal } from '../modal/modal.actions';
-import { validateMessage } from '../../app/utils/config';
+import { validateMessage, actionTypes } from '../../app/utils/config';
 
 const requiredRule = {
   required: true,
@@ -12,9 +12,7 @@ const requiredRule = {
 
 function ExperienceForm(props) {
   const dispatch = useDispatch();
-  const loading = useSelector(state =>
-    state.async.type === 'addExperience' ? state.async.loading : false
-  );
+  const { loading, type } = useSelector(state => state.async);
   const [form] = Form.useForm();
   const [current, setCurrent] = useState(false);
 
@@ -31,6 +29,11 @@ function ExperienceForm(props) {
     }
     dispatch(addExperience(experience));
   };
+
+  const { profile: profileAction } = actionTypes;
+
+  const addExperienceLoading =
+    type === profileAction.ADD_EXPERIENCE ? loading : false;
 
   return (
     <Form form={form} onFinish={handleSubmit} autoComplete='off'>
@@ -61,7 +64,11 @@ function ExperienceForm(props) {
       </Form.Item>
       <Form.Item>
         <Space>
-          <Button type='primary' htmlType='submit' loading={loading}>
+          <Button
+            type='primary'
+            htmlType='submit'
+            loading={addExperienceLoading}
+          >
             Submit
           </Button>
           <Button type='default' onClick={handleCancel}>

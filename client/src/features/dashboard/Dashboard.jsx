@@ -15,6 +15,7 @@ import {
 } from '../profile/profile.actions';
 import { openDrawer } from '../drawer/drawer.actions';
 import NotFoundProfile from '../profile/NotFoundProfile';
+import { actionTypes } from '../../app/utils/config';
 
 function Dashboard(props) {
   const dispatch = useDispatch();
@@ -34,10 +35,16 @@ function Dashboard(props) {
     // eslint-disable-next-line
   }, []);
 
-  const getProfileLoading = type === 'getProfile' ? loading : false;
-  const exDeleteLoading = type === 'deleteExperience' ? loading : false;
-  const edDeleteLoading = type === 'deleteEducation' ? loading : false;
-  const accDeleteLoading = type === 'deleteAccount' ? loading : false;
+  const { profile: profileAction } = actionTypes;
+
+  const getProfileLoading =
+    type === profileAction.GET_PROFILE ? loading : false;
+  const exDeleteLoading =
+    type === profileAction.DELETE_EXPERIENCE ? loading : false;
+  const edDeleteLoading =
+    type === profileAction.DELETE_EDUCATION ? loading : false;
+  const accDeleteLoading =
+    type === profileAction.DELETE_ACCOUNT ? loading : false;
 
   const handleAddExperience = () => dispatch(openDrawer('ExperienceAction'));
   const handleAddEducation = () => dispatch(openDrawer('EducationAction'));

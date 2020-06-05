@@ -19,6 +19,9 @@ import { logout, getAuthUser } from '../auth/auth.actions';
 import { closeDrawer } from '../drawer/drawer.actions';
 import { setDefaultAxios } from '../../app/utils/helper';
 import { closeModal } from '../modal/modal.actions';
+import { actionTypes } from '../../app/utils/config';
+
+const { profile: profileAction } = actionTypes;
 
 export const uploadProfileImage = file => async dispatch => {
   const formData = new FormData();
@@ -29,7 +32,7 @@ export const uploadProfileImage = file => async dispatch => {
   };
   formData.append('image', file.originFileObj);
 
-  dispatch(asyncActionStart('uploadProfileImage'));
+  dispatch(asyncActionStart(profileAction.UPLOAD_PROFILE_IMAGE));
   try {
     const res = await axios.post('/profile/me/upload', formData, config);
     const { profile } = res.data;
@@ -46,7 +49,8 @@ export const uploadProfileImage = file => async dispatch => {
 };
 
 export const getProfiles = (authUserId = null) => async dispatch => {
-  dispatch(asyncActionStart('getProfiles'));
+  dispatch(asyncActionStart(profileAction.GET_PROFILES));
+
   try {
     const res = await axios.get('/profile');
     const profiles = res.data.profiles.filter(
@@ -63,7 +67,7 @@ export const getProfiles = (authUserId = null) => async dispatch => {
 
 export const getAuthProfile = history => async dispatch => {
   setDefaultAxios();
-  dispatch(asyncActionStart('getProfile'));
+  dispatch(asyncActionStart(profileAction.GET_PROFILE));
 
   try {
     const res = await axios.get('/profile/me');
@@ -87,7 +91,7 @@ export const getAuthProfile = history => async dispatch => {
 
 export const getProfile = userId => async dispatch => {
   setDefaultAxios();
-  dispatch(asyncActionStart('getProfile'));
+  dispatch(asyncActionStart(profileAction.GET_PROFILE));
 
   try {
     const res = await axios.get(`/profile/user/${userId}`);
@@ -106,7 +110,7 @@ export const getProfile = userId => async dispatch => {
 };
 
 export const getGithubRepositories = githubUsername => async dispatch => {
-  dispatch(asyncActionStart('getGithubRepositories'));
+  dispatch(asyncActionStart(profileAction.GET_GITHUB_REPOSITORIES));
 
   try {
     const res = await axios.get(`/profile/github/${githubUsername}`);
@@ -126,7 +130,7 @@ export const getGithubRepositories = githubUsername => async dispatch => {
 };
 
 export const profileActions = (profileInfo, edit = false) => async dispatch => {
-  dispatch(asyncActionStart('profileAction'));
+  dispatch(asyncActionStart(profileAction.PROFILE_ACTIONS));
   const successMessage = edit
     ? 'Your profile has been updated'
     : 'Your profile has been created';
@@ -148,7 +152,7 @@ export const profileActions = (profileInfo, edit = false) => async dispatch => {
 };
 
 export const addExperience = experience => async dispatch => {
-  dispatch(asyncActionStart('addExperience'));
+  dispatch(asyncActionStart(profileAction.ADD_EXPERIENCE));
 
   try {
     const res = await axios.put('/profile/experience', experience);
@@ -168,7 +172,7 @@ export const addExperience = experience => async dispatch => {
 };
 
 export const addEducation = education => async dispatch => {
-  dispatch(asyncActionStart('addEducation'));
+  dispatch(asyncActionStart(profileAction.ADD_EDUCATION));
 
   try {
     const res = await axios.put('/profile/education', education);
@@ -190,7 +194,7 @@ export const addEducation = education => async dispatch => {
 export const deleteExperience = exId => async dispatch => {
   toastr.confirm('Are your sure you want to delete this experience?', {
     onOk: async () => {
-      dispatch(asyncActionStart('deleteExperience', exId));
+      dispatch(asyncActionStart(profileAction.DELETE_EXPERIENCE, exId));
 
       try {
         await axios.delete(`profile/experience/${exId}`);
@@ -209,7 +213,7 @@ export const deleteExperience = exId => async dispatch => {
 export const deleteEducation = edId => dispatch => {
   toastr.confirm('Are your sure you want to delete this education?', {
     onOk: async () => {
-      dispatch(asyncActionStart('deleteEducation', edId));
+      dispatch(asyncActionStart(profileAction.DELETE_EDUCATION, edId));
 
       try {
         await axios.delete(`/profile/education/${edId}`);
@@ -228,7 +232,7 @@ export const deleteEducation = edId => dispatch => {
 export const deleteAccount = () => dispatch => {
   toastr.confirm('Are your sure? This can NOT be undone', {
     onOk: async () => {
-      dispatch(asyncActionStart('deleteAccount'));
+      dispatch(asyncActionStart(profileAction.DELETE_ACCOUNT));
 
       try {
         await axios.put('/profile');

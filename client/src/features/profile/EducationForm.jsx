@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, DatePicker, Space, Button, Checkbox } from 'antd';
 import { addEducation } from './profile.actions';
 import { closeModal } from '../modal/modal.actions';
-import { validateMessage } from '../../app/utils/config';
+import { validateMessage, actionTypes } from '../../app/utils/config';
 
 const requiredRule = {
   required: true,
@@ -12,9 +12,7 @@ const requiredRule = {
 
 function EducationForm(props) {
   const dispatch = useDispatch();
-  const loading = useSelector(state =>
-    state.async.type === 'addEducation' ? state.async.loading : false
-  );
+  const { loading, type } = useSelector(state => state.async);
   const [form] = Form.useForm();
   const [current, setCurrent] = useState(false);
 
@@ -31,6 +29,11 @@ function EducationForm(props) {
     }
     dispatch(addEducation(education));
   };
+
+  const { profile: profileAction } = actionTypes;
+
+  const addEducationLoading =
+    type === profileAction.ADD_EDUCATION ? loading : false;
 
   return (
     <Form form={form} onFinish={handleSubmit} autoComplete='off'>
@@ -63,7 +66,11 @@ function EducationForm(props) {
       </Form.Item>
       <Form.Item>
         <Space>
-          <Button type='primary' htmlType='submit' loading={loading}>
+          <Button
+            type='primary'
+            htmlType='submit'
+            loading={addEducationLoading}
+          >
             Submit
           </Button>
           <Button type='default' onClick={handleCancel}>

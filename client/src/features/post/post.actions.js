@@ -16,9 +16,13 @@ import {
   DELETE_COMMENT,
 } from './post.constants';
 import { toastr } from 'react-redux-toastr';
+import { actionTypes } from '../../app/utils/config';
+
+const { post: postAction } = actionTypes;
 
 export const getPosts = () => async dispatch => {
-  dispatch(asyncActionStart('getPosts'));
+  dispatch(asyncActionStart(postAction.GET_POSTS));
+
   try {
     const res = await axios.get('/post');
     const { posts } = res.data;
@@ -32,7 +36,8 @@ export const getPosts = () => async dispatch => {
 };
 
 export const getPost = id => async dispatch => {
-  dispatch(asyncActionStart('getPost'));
+  dispatch(asyncActionStart(postAction.GET_POST));
+
   try {
     const res = await axios.get(`/post/${id}`);
     const { post } = res.data;
@@ -46,7 +51,7 @@ export const getPost = id => async dispatch => {
 };
 
 export const createPost = ({ text }) => async dispatch => {
-  dispatch(asyncActionStart('createPost'));
+  dispatch(asyncActionStart(postAction.CREATE_POST));
 
   try {
     const res = await axios.post('/post', { text });
@@ -60,7 +65,7 @@ export const createPost = ({ text }) => async dispatch => {
 };
 
 export const likePost = postId => async dispatch => {
-  dispatch(asyncActionStart('likePost', postId));
+  dispatch(asyncActionStart(postAction.LIKE_POST, postId));
 
   try {
     const res = await axios.put(`/post/like/${postId}`);
@@ -75,7 +80,7 @@ export const likePost = postId => async dispatch => {
 };
 
 export const unlikePost = postId => async dispatch => {
-  dispatch(asyncActionStart('unlikePost', postId));
+  dispatch(asyncActionStart(postAction.UNLIKE_POST, postId));
 
   try {
     const res = await axios.put(`/post/unlike/${postId}`);
@@ -92,10 +97,10 @@ export const unlikePost = postId => async dispatch => {
 export const deletePost = postId => async dispatch => {
   toastr.confirm('Are your sure? This can NOT be undone', {
     onOk: async () => {
-      dispatch(asyncActionStart('deletePost', postId));
+      dispatch(asyncActionStart(postAction.DELETE_POST, postId));
 
       try {
-        await axios.delete(`/post/${postId}`);
+        await axios.put(`/post/${postId}`);
 
         dispatch({ type: DELETE_POST, payload: { postId } });
         dispatch(asyncActionFinish());
@@ -109,7 +114,7 @@ export const deletePost = postId => async dispatch => {
 };
 
 export const commentOnPost = (comment, postId) => async dispatch => {
-  dispatch(asyncActionStart('commentOnPost'));
+  dispatch(asyncActionStart(postAction.COMMENT_ON_POST));
 
   try {
     const res = await axios.post(`/post/comment/${postId}`, comment);
@@ -124,7 +129,7 @@ export const commentOnPost = (comment, postId) => async dispatch => {
 };
 
 export const deleteComment = (commentId, postId) => async dispatch => {
-  dispatch(asyncActionStart('deleteComment', commentId));
+  dispatch(asyncActionStart(postAction.DELETE_COMMENT, commentId));
 
   try {
     const res = await axios.delete(`/post/comment/${postId}/${commentId}`);

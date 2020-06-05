@@ -6,6 +6,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { openModal } from '../../modal/modal.actions';
 import { login } from '../auth.actions';
 import { asyncActionClear } from '../../async/async.actions';
+import { actionTypes } from '../../../app/utils/config';
 
 const { Text } = Typography;
 
@@ -26,6 +27,8 @@ function LoginForm(props) {
     // eslint-disable-next-line
   }, []);
 
+  const { auth: authAction, profile: profileAction } = actionTypes;
+
   const handleSubmit = values => {
     const userCredentials = {
       email: values.email,
@@ -36,8 +39,9 @@ function LoginForm(props) {
   };
   const signUp = () => dispatch(openModal('Register'));
 
-  const loginLoading = type === 'login' ? loading : false;
-  const getAuthProfileLoading = type === 'getProfile' ? loading : false;
+  const loginLoading = type === authAction.LOGIN ? loading : false;
+  const getAuthProfileLoading =
+    type === profileAction.GET_PROFILE ? loading : false;
 
   const loginFormLoading = loginLoading || getAuthProfileLoading;
 

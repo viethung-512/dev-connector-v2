@@ -10,11 +10,14 @@ import { SET_AUTH_USER, LOGOUT_USER } from './auth.constants';
 import { CLEAR_PROFILE } from '../profile/profile.constants';
 import { getAuthProfile } from '../profile/profile.actions';
 import { ASYNC_ACTION_CLEAR } from '../async/async.constants';
+import { actionTypes } from '../../app/utils/config';
+
+const { auth: authAction } = actionTypes;
 
 export const getAuthUser = () => async dispatch => {
   setDefaultAxios();
 
-  dispatch(asyncActionStart('getAuthUser'));
+  dispatch(asyncActionStart(authAction.GET_AUTH_USER));
 
   try {
     const res = await axios.get('/auth');
@@ -34,7 +37,7 @@ export const login = (userCredentials, history) => async dispatch => {
   const body = JSON.stringify(userCredentials);
 
   try {
-    dispatch(asyncActionStart('login'));
+    dispatch(asyncActionStart(authAction.LOGIN));
     const res = await axios.post('/auth/login', body);
     const { token, user } = res.data;
 
@@ -56,7 +59,7 @@ export const register = (userCredentials, history) => async dispatch => {
   const body = JSON.stringify(userCredentials);
 
   try {
-    dispatch(asyncActionStart('register'));
+    dispatch(asyncActionStart(authAction.REGISTER));
     const res = await axios.post('/auth/register', body);
     const { token, user } = res.data;
 

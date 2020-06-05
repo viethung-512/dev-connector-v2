@@ -6,6 +6,7 @@ import { getProfiles } from '../profile.actions';
 import Header from './Header';
 import { Spin } from 'antd';
 import { LoadingIcon } from '../../../app/layout/common/Icons';
+import { actionTypes } from '../../../app/utils/config';
 
 function DevelopersPage(props) {
   const dispatch = useDispatch();
@@ -13,8 +14,12 @@ function DevelopersPage(props) {
   const profiles = useSelector(state => state.profile.profiles);
   const { type, loading } = useSelector(state => state.async);
 
-  const getAuthProfileLoading = type === 'getProfile' ? loading : false;
-  const getProfilesLoading = type === 'getProfiles' ? loading : false;
+  const { profile: profileAction } = actionTypes;
+
+  const getAuthProfileLoading =
+    type === profileAction.GET_PROFILE ? loading : false;
+  const getProfilesLoading =
+    type === profileAction.GET_PROFILES ? loading : false;
 
   const dashboardLoading = getAuthProfileLoading || getProfilesLoading;
 

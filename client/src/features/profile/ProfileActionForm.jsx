@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { profileActions } from './profile.actions';
 import { closeDrawer } from '../drawer/drawer.actions';
+import { actionTypes } from '../../app/utils/config';
 
 const formItemLayout = { labelCol: { span: 1 }, wrapperCol: { span: 23 } };
 
@@ -42,7 +43,10 @@ function ProfileActionForm({ profile }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
 
-  const profileLoading = type === 'profileAction' ? loading : false;
+  const { profile: profileAction } = actionTypes;
+
+  const profileLoading =
+    type === profileAction.PROFILE_ACTIONS ? loading : false;
 
   const handleSubmit = profileInfo => {
     profileInfo.skills = profileInfo.skills.join(', ');

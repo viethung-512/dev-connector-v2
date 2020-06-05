@@ -5,6 +5,7 @@ import ImgCrop from 'antd-img-crop';
 import { closeModal } from '../modal.actions';
 import { uploadProfileImage } from '../../profile/profile.actions';
 import { UploadOutlined, LinkOutlined } from '@ant-design/icons';
+import { actionTypes } from '../../../app/utils/config';
 
 const { Text } = Typography;
 
@@ -13,6 +14,8 @@ const UploadImage = props => {
   const { loading, type } = useSelector(state => state.async);
   const [image, setImage] = useState(null);
   const [error, setError] = useState(null);
+
+  const { profile: profileAction } = actionTypes;
 
   const handleCancel = () => dispatch(closeModal());
 
@@ -31,7 +34,8 @@ const UploadImage = props => {
     }
   };
 
-  const uploadLoading = type === 'uploadProfileImage' ? loading : false;
+  const uploadLoading =
+    type === profileAction.UPLOAD_PROFILE_IMAGE ? loading : false;
 
   return (
     <Modal

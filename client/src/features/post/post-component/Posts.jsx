@@ -2,6 +2,7 @@ import React from 'react';
 import { List } from 'antd';
 import { LoadingIcon } from '../../../app/layout/common/Icons';
 import Item from '../Item';
+import { actionTypes } from '../../../app/utils/config';
 
 function Posts({
   posts,
@@ -14,6 +15,8 @@ function Posts({
   loadingType,
   loadingElm,
 }) {
+  const { post: postAction } = actionTypes;
+
   return (
     <div className='postpage__posts'>
       <List
@@ -30,17 +33,19 @@ function Posts({
               unlikePost={unlikePost}
               deletePost={deletePost}
               likeLoading={
-                loadingType === 'likePost' && loadingElm === post._id
+                loadingType === postAction.LIKE_POST && loadingElm === post._id
                   ? loading
                   : false
               }
               unlikeLoading={
-                loadingType === 'unlikePost' && loadingElm === post._id
+                loadingType === postAction.UNLIKE_POST &&
+                loadingElm === post._id
                   ? loading
                   : false
               }
               deleteLoading={
-                loadingType === 'deletePost' && loadingElm === post._id
+                loadingType === postAction.DELETE_POST &&
+                loadingElm === post._id
                   ? loading
                   : false
               }

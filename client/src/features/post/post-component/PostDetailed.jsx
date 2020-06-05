@@ -8,6 +8,7 @@ import { Divider, Button, Spin } from 'antd';
 import { LoadingIcon } from '../../../app/layout/common/Icons';
 import Comments from '../comment/Comments';
 import { ArrowLeftOutlined } from '@ant-design/icons';
+import { actionTypes } from '../../../app/utils/config';
 
 function PostDetailed(props) {
   const dispatch = useDispatch();
@@ -16,8 +17,10 @@ function PostDetailed(props) {
   const { user: authUser } = useSelector(state => state.auth);
   const { loading, type, elmId } = useSelector(state => state.async);
 
-  const loadingPost = type === 'getPost' ? loading : false;
-  const commentLoading = type === 'commentOnPost' ? loading : false;
+  const { post: postAction } = actionTypes;
+
+  const loadingPost = type === postAction.GET_POST ? loading : false;
+  const commentLoading = type === postAction.COMMENT_ON_POST ? loading : false;
 
   const postDetailedLoading = loadingPost;
 

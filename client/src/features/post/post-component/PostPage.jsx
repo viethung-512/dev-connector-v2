@@ -11,6 +11,7 @@ import {
   deletePost,
 } from '../post.actions';
 import AddItem from '../AddItem';
+import { actionTypes } from '../../../app/utils/config';
 
 function PostPage(props) {
   const dispatch = useDispatch();
@@ -24,8 +25,10 @@ function PostPage(props) {
     // eslint-disable-next-line
   }, []);
 
-  const loadingPosts = type === 'getPosts' ? loading : false;
-  const createPostLoading = type === 'createPost' ? loading : false;
+  const { post: postAction } = actionTypes;
+
+  const loadingPosts = type === postAction.GET_POSTS ? loading : false;
+  const createPostLoading = type === postAction.CREATE_POST ? loading : false;
   const postPageLoading = loadingPosts;
 
   const handleCreatePost = post => {

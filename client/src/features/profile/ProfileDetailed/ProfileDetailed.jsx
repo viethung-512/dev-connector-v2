@@ -16,6 +16,7 @@ import Container from './Container/Container';
 import { openDrawer } from '../../drawer/drawer.actions';
 import NotFoundProfile from '../NotFoundProfile';
 import { openModal } from '../../modal/modal.actions';
+import { actionTypes } from '../../../app/utils/config';
 
 function ProfileDetailed(props) {
   const dispatch = useDispatch();
@@ -24,10 +25,13 @@ function ProfileDetailed(props) {
   const profile = useSelector(state => state.profile.current);
   const repos = useSelector(state => state.profile.repositories);
 
+  const { profile: profileAction } = actionTypes;
+
   const githubUsername =
     profile && profile.githubUsername ? profile.githubUsername : null;
-  const loadingRepos = type === 'getGithubRepositories' ? loading : false;
-  const loadingProfile = type === 'getProfile' ? loading : false;
+  const loadingRepos =
+    type === profileAction.GET_GITHUB_REPOSITORIES ? loading : false;
+  const loadingProfile = type === profileAction.GET_PROFILE ? loading : false;
 
   const loadingDetail = loadingRepos || loadingProfile;
 
