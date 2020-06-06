@@ -24,7 +24,7 @@ export const getPosts = () => async dispatch => {
   dispatch(asyncActionStart(postAction.GET_POSTS));
 
   try {
-    const res = await axios.get('/post');
+    const res = await axios.get('/api/post');
     const { posts } = res.data;
 
     dispatch({ type: SET_POSTS, payload: { posts } });
@@ -39,7 +39,7 @@ export const getPost = id => async dispatch => {
   dispatch(asyncActionStart(postAction.GET_POST));
 
   try {
-    const res = await axios.get(`/post/${id}`);
+    const res = await axios.get(`/api/post/${id}`);
     const { post } = res.data;
 
     dispatch({ type: SET_CURRENT_POST, payload: { post } });
@@ -54,7 +54,7 @@ export const createPost = ({ text }) => async dispatch => {
   dispatch(asyncActionStart(postAction.CREATE_POST));
 
   try {
-    const res = await axios.post('/post', { text });
+    const res = await axios.post('/api/post', { text });
     const { post } = res.data;
 
     dispatch({ type: CREATE_POST, payload: { post } });
@@ -68,7 +68,7 @@ export const likePost = postId => async dispatch => {
   dispatch(asyncActionStart(postAction.LIKE_POST, postId));
 
   try {
-    const res = await axios.put(`/post/like/${postId}`);
+    const res = await axios.put(`/api/post/like/${postId}`);
     const { post } = res.data;
 
     dispatch({ type: LIKE_POST, payload: { post } });
@@ -83,7 +83,7 @@ export const unlikePost = postId => async dispatch => {
   dispatch(asyncActionStart(postAction.UNLIKE_POST, postId));
 
   try {
-    const res = await axios.put(`/post/unlike/${postId}`);
+    const res = await axios.put(`/api/post/unlike/${postId}`);
     const { post } = res.data;
 
     dispatch({ type: UNLIKE_POST, payload: { post } });
@@ -100,7 +100,7 @@ export const deletePost = postId => async dispatch => {
       dispatch(asyncActionStart(postAction.DELETE_POST, postId));
 
       try {
-        await axios.put(`/post/${postId}`);
+        await axios.put(`/api/post/${postId}`);
 
         dispatch({ type: DELETE_POST, payload: { postId } });
         dispatch(asyncActionFinish());
@@ -117,7 +117,7 @@ export const commentOnPost = (comment, postId) => async dispatch => {
   dispatch(asyncActionStart(postAction.COMMENT_ON_POST));
 
   try {
-    const res = await axios.post(`/post/comment/${postId}`, comment);
+    const res = await axios.post(`/api/post/comment/${postId}`, comment);
     const { post } = res.data;
 
     dispatch({ type: COMMENT_ON_POST, payload: { post } });
@@ -132,7 +132,7 @@ export const deleteComment = (commentId, postId) => async dispatch => {
   dispatch(asyncActionStart(postAction.DELETE_COMMENT, commentId));
 
   try {
-    const res = await axios.delete(`/post/comment/${postId}/${commentId}`);
+    const res = await axios.delete(`/api/post/comment/${postId}/${commentId}`);
     const { post } = res.data;
 
     dispatch({ type: DELETE_COMMENT, payload: { post } });

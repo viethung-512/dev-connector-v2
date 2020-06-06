@@ -34,7 +34,7 @@ export const uploadProfileImage = file => async dispatch => {
 
   dispatch(asyncActionStart(profileAction.UPLOAD_PROFILE_IMAGE));
   try {
-    const res = await axios.post('/profile/me/upload', formData, config);
+    const res = await axios.post('/api/profile/me/upload', formData, config);
     const { profile } = res.data;
 
     dispatch({ type: SET_CURRENT_PROFILE, payload: { profile } });
@@ -52,7 +52,7 @@ export const getProfiles = (authUserId = null) => async dispatch => {
   dispatch(asyncActionStart(profileAction.GET_PROFILES));
 
   try {
-    const res = await axios.get('/profile');
+    const res = await axios.get('/api/profile');
     const profiles = res.data.profiles.filter(
       profile => profile.user._id !== authUserId
     );
@@ -70,7 +70,7 @@ export const getAuthProfile = history => async dispatch => {
   dispatch(asyncActionStart(profileAction.GET_PROFILE));
 
   try {
-    const res = await axios.get('/profile/me');
+    const res = await axios.get('/api/profile/me');
     const { profile } = res.data;
 
     dispatch({ type: SET_CURRENT_PROFILE, payload: { profile } });
@@ -94,7 +94,7 @@ export const getProfile = userId => async dispatch => {
   dispatch(asyncActionStart(profileAction.GET_PROFILE));
 
   try {
-    const res = await axios.get(`/profile/user/${userId}`);
+    const res = await axios.get(`/api/profile/user/${userId}`);
     const { profile } = res.data;
 
     dispatch({ type: SET_CURRENT_PROFILE, payload: { profile } });
@@ -113,7 +113,7 @@ export const getGithubRepositories = githubUsername => async dispatch => {
   dispatch(asyncActionStart(profileAction.GET_GITHUB_REPOSITORIES));
 
   try {
-    const res = await axios.get(`/profile/github/${githubUsername}`);
+    const res = await axios.get(`/api/profile/github/${githubUsername}`);
     const repositories = res.data;
 
     dispatch({ type: SET_REPOSITORIES, payload: { repositories } });
@@ -136,7 +136,7 @@ export const profileActions = (profileInfo, edit = false) => async dispatch => {
     : 'Your profile has been created';
 
   try {
-    const res = await axios.post('/profile', profileInfo);
+    const res = await axios.post('/api/profile', profileInfo);
     const { profile } = res.data;
 
     dispatch(getGithubRepositories(profile.githubUsername));
@@ -155,7 +155,7 @@ export const addExperience = experience => async dispatch => {
   dispatch(asyncActionStart(profileAction.ADD_EXPERIENCE));
 
   try {
-    const res = await axios.put('/profile/experience', experience);
+    const res = await axios.put('/api/profile/experience', experience);
     const { profile } = res.data;
 
     dispatch({
@@ -175,7 +175,7 @@ export const addEducation = education => async dispatch => {
   dispatch(asyncActionStart(profileAction.ADD_EDUCATION));
 
   try {
-    const res = await axios.put('/profile/education', education);
+    const res = await axios.put('/api/profile/education', education);
     const { profile } = res.data;
 
     dispatch({
@@ -197,7 +197,7 @@ export const deleteExperience = exId => async dispatch => {
       dispatch(asyncActionStart(profileAction.DELETE_EXPERIENCE, exId));
 
       try {
-        await axios.delete(`profile/experience/${exId}`);
+        await axios.delete(`/api/profile/experience/${exId}`);
 
         dispatch({ type: DELETE_EXPERIENCE, payload: { exId } });
         dispatch(asyncActionFinish());
@@ -216,7 +216,7 @@ export const deleteEducation = edId => dispatch => {
       dispatch(asyncActionStart(profileAction.DELETE_EDUCATION, edId));
 
       try {
-        await axios.delete(`/profile/education/${edId}`);
+        await axios.delete(`/api/profile/education/${edId}`);
 
         dispatch({ type: DELETE_EDUCATION, payload: { edId } });
         dispatch(asyncActionFinish());
@@ -235,7 +235,7 @@ export const deleteAccount = () => dispatch => {
       dispatch(asyncActionStart(profileAction.DELETE_ACCOUNT));
 
       try {
-        await axios.put('/profile');
+        await axios.put('/api/profile');
 
         dispatch(logout());
         dispatch(asyncActionFinish());

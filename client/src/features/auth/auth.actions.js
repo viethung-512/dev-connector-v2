@@ -20,7 +20,7 @@ export const getAuthUser = () => async dispatch => {
   dispatch(asyncActionStart(authAction.GET_AUTH_USER));
 
   try {
-    const res = await axios.get('/auth');
+    const res = await axios.get('/api/auth');
     const { user } = res.data;
 
     dispatch({ type: SET_AUTH_USER, payload: { user } });
@@ -38,7 +38,7 @@ export const login = (userCredentials, history) => async dispatch => {
 
   try {
     dispatch(asyncActionStart(authAction.LOGIN));
-    const res = await axios.post('/auth/login', body);
+    const res = await axios.post('/api/auth/login', body);
     const { token, user } = res.data;
 
     localStorage.setItem('token', token);
@@ -60,7 +60,7 @@ export const register = (userCredentials, history) => async dispatch => {
 
   try {
     dispatch(asyncActionStart(authAction.REGISTER));
-    const res = await axios.post('/auth/register', body);
+    const res = await axios.post('/api/auth/register', body);
     const { token, user } = res.data;
 
     localStorage.setItem('token', token);
