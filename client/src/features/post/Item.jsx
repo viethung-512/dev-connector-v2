@@ -46,7 +46,7 @@ function Item({
               src={item.user.avatar || defaultImages.USER}
               alt={item.user.name || defaultName.USER}
               size={100}
-              className='post-item__avatar-img'
+              className='avatar__image'
             />
             <Link to={isOwn ? '/profile/me' : `/profile/${item.user._id}`}>
               <Text level={4} className='post-item__title'>

@@ -42,9 +42,30 @@ export const uploadProfileImage = file => async dispatch => {
     dispatch(getAuthProfile());
     dispatch(asyncActionFinish());
     dispatch(closeModal());
+    toastr.success('Success', 'Your avatar has been updated');
   } catch (err) {
     console.log(err);
     dispatch(asyncActionError());
+    toastr.error('Oops', 'Some thing went wrong, please try again');
+  }
+};
+
+export const changeProfileImage = id => async dispatch => {
+  dispatch(asyncActionStart(profileAction.CHANGE_PROFILE_IMAGE, id));
+
+  try {
+    const res = await axios.put(`/api/profile/me/changeAvatar/${id}`);
+    const { profile } = res.data;
+
+    dispatch({ type: SET_CURRENT_PROFILE, payload: { profile } });
+    dispatch(getAuthUser());
+    dispatch(getAuthProfile());
+    dispatch(asyncActionFinish());
+    dispatch(closeModal());
+    toastr.success('Success', 'Your avatar has been updated');
+  } catch (err) {
+    dispatch(asyncActionError());
+    toastr.error('Oops', 'Some thing went wrong, please try again');
   }
 };
 

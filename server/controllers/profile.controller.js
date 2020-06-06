@@ -82,7 +82,7 @@ const uploadProfileImage = async (req, res, next) => {
       return next({ status: 404, message: 'Profile not found' });
     }
 
-    const newPhotos = [imageUrl, ...profile.photos];
+    const newPhotos = [{ url: imageUrl }, ...profile.photos];
     await Post.updateMany({ user: authUserId }, { avatar: imageUrl });
     profile = await Profile.findOneAndUpdate(
       { user: authUserId },
@@ -94,6 +94,42 @@ const uploadProfileImage = async (req, res, next) => {
     return res.json({ profile });
   } catch (err) {
     console.error(err.name);
+    return next({ status: 500 });
+  }
+};
+
+const changeProfileImage = async (req, res, next) => {
+  const authUserId = req.user.id;
+  const { avatarId } = req.params;
+
+  try {
+    const user = await User.findById(authUserId);
+    let profile = await Profile.findOne({ user: authUserId });
+
+    if (!user || !user.enabled || !profile || !profile.enabled) {
+      return next({ status: 400 });
+    }
+
+    const newAvatar = profile.photos.find(
+      photo => photo._id.toString() === avatarId
+    );
+
+    if (!newAvatar) {
+      return next({ status: 400, message: 'Avatar url is not exists' });
+    }
+
+    await User.findByIdAndUpdate(authUserId, { avatar: newAvatar.url });
+
+    profile = await Profile.findOne({ user: authUserId }).populate('user', [
+      'name',
+      'avatar',
+    ]);
+
+    return res.json({ profile });
+  } catch (err) {
+    if (err.name == 'CastError') {
+      return next({ status: 400, message: 'Avatar url is not exists' });
+    }
     return next({ status: 500 });
   }
 };
@@ -189,6 +225,7 @@ module.exports = {
   createUpdateProfile,
   deleteProfile,
   uploadProfileImage,
+  changeProfileImage,
   getAllProfile,
   getAuthProfile,
   getProfileByUser,

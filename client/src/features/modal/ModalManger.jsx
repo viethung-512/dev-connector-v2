@@ -3,11 +3,13 @@ import { useSelector } from 'react-redux';
 import ModalLogin from './auth/ModalLogin';
 import ModalRegister from './auth/ModalRegister';
 import UploadImage from './profile/UploadImage';
+import LibImage from './profile/LibImageModal';
 
 const modalLookup = {
   Login: ModalLogin,
   Register: ModalRegister,
   UploadProfileImage: UploadImage,
+  LibImageModal: LibImage,
 };
 
 function ModalManger(props) {

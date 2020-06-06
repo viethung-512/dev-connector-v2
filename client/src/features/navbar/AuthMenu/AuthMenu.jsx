@@ -78,7 +78,11 @@ function AuthMenu({ mobile = false, authUser, logout, closeMenuMobile }) {
       >
         <Dropdown overlay={useMenu} trigger={['click', 'hover']}>
           <span className='auth-menu'>
-            <Avatar src={avatar} alt={name} className='avatar' />
+            <Avatar
+              src={avatar}
+              alt={name}
+              className='avatar--header avatar__image'
+            />
             {name}
           </span>
         </Dropdown>

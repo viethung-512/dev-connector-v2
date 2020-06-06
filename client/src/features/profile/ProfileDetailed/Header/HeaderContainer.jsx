@@ -41,6 +41,7 @@ function HeaderContainer({
                 size={220}
                 src={avatar || defaultImages.USER}
                 alt={name}
+                className='avatar__image'
               />
               {isAuth && (
                 <Button
