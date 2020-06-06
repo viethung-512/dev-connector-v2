@@ -1,4 +1,7 @@
 node_modules/
+
 .vscode
+
 config/default.json
+
 server/serviceAccount.json
