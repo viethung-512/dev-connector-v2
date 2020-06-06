@@ -35,7 +35,6 @@ export const getAuthUser = () => async dispatch => {
 
 export const login = (userCredentials, history) => async dispatch => {
   const body = JSON.stringify(userCredentials);
-  console.log(axios.defaults.baseURL);
 
   try {
     dispatch(asyncActionStart(authAction.LOGIN));
