@@ -11,8 +11,8 @@
 }
 
 .logo {
-  display: flex;
-  height: 100%;
+  display: flex !important;
+  height: 100% !important;
 
   color: #fff;
   font-size: 24px;
@@ -83,5 +83,12 @@
 
   .main-menu--lg {
     display: none;
+  }
+}
+
+@media (max-width: 500px) {
+  .header {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }

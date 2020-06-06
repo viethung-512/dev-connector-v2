@@ -5,3 +5,9 @@
   height: 100%;
   background-color: #fff !important;
 }
+
+@media (max-width: 500px) {
+  .app-content {
+    padding: 16px;
+  }
+}

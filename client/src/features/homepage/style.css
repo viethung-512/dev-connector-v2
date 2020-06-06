@@ -20,6 +20,8 @@
   right: 0;
   bottom: 0;
   left: 0;
+
+  padding: 40px;
 }
 
 .homepage__title {
@@ -28,6 +30,8 @@
   color: #fff !important;
 
   margin-bottom: 24px !important;
+
+  text-align: center;
 }
 
 .homepage__description {
@@ -35,10 +39,45 @@
   color: #fff;
   line-height: 24px;
 
+  text-align: center !important;
+
   margin-bottom: 12px;
 }
 
 .homepage__button {
   font-size: 24px;
   height: 50px;
+}
+
+@media (max-width: 960px) {
+  .overlay {
+    padding: 32px !important;
+  }
+  .homepage__title {
+    font-size: 40px !important;
+    line-height: 40px !important;
+  }
+
+  .homepage__button,
+  .homepage__description {
+    font-size: 18px !important;
+    line-height: 18px !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .overlay {
+    padding: 24px !important;
+  }
+  .homepage__title {
+    font-size: 32px !important;
+    line-height: 32px !important;
+  }
+
+  .homepage__button,
+  .homepage__description {
+    font-size: 14px !important;
+    line-height: 14px !important;
+    width: 100% !important;
+  }
 }
