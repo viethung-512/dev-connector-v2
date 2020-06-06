@@ -21,13 +21,11 @@ function MenuMobileDrawer(props) {
     dispatch(closeDrawer());
   };
 
-  const smallScreen = window.innerWidth <= 320;
-
   return (
     <Drawer
       visible
       onClose={closeMenuMobile}
-      width={smallScreen ? '100%' : 320}
+      width={320}
       headerStyle={{ backgroundColor: '#fff', height: 64 }}
     >
       <MainMenu

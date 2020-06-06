@@ -20,14 +20,12 @@ function DrawerBase({ title, description, children }) {
     </div>
   );
 
-  const smallScreen = window.innerWidth <= 600;
-
   return (
     <Drawer
       visible
       onClose={handleClose}
       title={header}
-      width={smallScreen ? '100%' : 600}
+      width='100%'
       footer={null}
       destroyOnClose={true}
     >
