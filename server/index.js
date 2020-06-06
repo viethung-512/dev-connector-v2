@@ -1,7 +1,6 @@
 const express = require('express');
 const connectDB = require('./utils/db');
 const routes = require('./routes/index');
-const cors = require('cors');
 const path = require('path');
 
 const { errorHandle } = require('./middleware/core.middleware');
@@ -10,7 +9,6 @@ const app = express();
 
 connectDB();
 
-app.use(cors());
 app.use(express.json({ extended: false }));
 app.use(routes);
 app.use(errorHandle);
