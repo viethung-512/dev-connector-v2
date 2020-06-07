@@ -20,12 +20,14 @@ function DrawerBase({ title, description, children }) {
     </div>
   );
 
+  console.log(global.window.innerWidth, 'drawer base');
+
   return (
     <Drawer
       visible
       onClose={handleClose}
       title={header}
-      width='100%'
+      width={global.window.innerWidth > 600 ? 600 : '100%'}
       footer={null}
       destroyOnClose={true}
     >
