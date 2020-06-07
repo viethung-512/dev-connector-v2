@@ -20,8 +20,6 @@ function DrawerBase({ title, description, children }) {
     </div>
   );
 
-  console.log(global.window.innerWidth, 'drawer base');
-
   return (
     <Drawer
       visible
