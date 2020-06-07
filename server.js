@@ -1,7 +1,7 @@
 const express = require('express');
-const connectDB = require('./server/utils/db');
-const routes = require('./routes/index');
 const path = require('path');
+const connectDB = require('./server/utils/db');
+const routes = require('./server/routes/index');
 
 const { errorHandle } = require('./server/middleware/core.middleware');
 
