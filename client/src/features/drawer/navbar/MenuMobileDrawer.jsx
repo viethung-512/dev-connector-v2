@@ -25,7 +25,7 @@ function MenuMobileDrawer(props) {
     <Drawer
       visible
       onClose={closeMenuMobile}
-      width={global.window.innerWidth > 320 ? 320 : '100%'}
+      width={320}
       headerStyle={{ backgroundColor: '#fff', height: 64 }}
     >
       <MainMenu
