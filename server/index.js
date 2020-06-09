@@ -1,13 +1,19 @@
 const express = require('express');
+const path = require('path');
+const { AwakeHeroku } = require('awake-heroku');
+
 const connectDB = require('./utils/db');
 const routes = require('./routes/index');
-const path = require('path');
 
 const { errorHandle } = require('./middleware/core.middleware');
 
 const app = express();
 
 connectDB();
+
+AwakeHeroku.add({
+  url: 'https://secure-beyond-57876.herokuapp.com/',
+});
 
 app.use(express.json({ extended: false }));
 app.use(routes);
