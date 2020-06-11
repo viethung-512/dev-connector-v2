@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Avatar, Typography, List, Button } from 'antd';
+import { Card, Typography, List, Button } from 'antd';
 import {
   TwitterCircleFilled,
   FacebookFilled,
@@ -8,7 +8,7 @@ import {
   InstagramFilled,
   EditOutlined,
 } from '@ant-design/icons';
-import { defaultImages } from '../../../../app/utils/config';
+import Avatar from '../../../../app/layout/common/Avatar';
 
 const { Title, Text } = Typography;
 
@@ -37,12 +37,7 @@ function HeaderContainer({
           className='profile-detailed__header-main'
           avatar={
             <div className='profile-detailed__header-avatar'>
-              <Avatar
-                size={220}
-                src={avatar || defaultImages.USER}
-                alt={name}
-                className='avatar__image'
-              />
+              <Avatar size={220} src={avatar} className='avatar__image' />
               {isAuth && (
                 <Button
                   type='primary'

@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Avatar, Typography, Space, Button } from 'antd';
+import { Card, Typography, Space, Button } from 'antd';
 import { DeleteOutlined, LikeFilled } from '@ant-design/icons';
 import { formatDate } from '../../app/utils/helper';
-import { defaultImages, defaultName } from '../../app/utils/config';
+import { defaultName } from '../../app/utils/config';
+
+import Avatar from '../../app/layout/common/Avatar';
 
 const { Text, Paragraph } = Typography;
 
@@ -43,8 +45,7 @@ function Item({
         avatar={
           <div className='post-item__avatar'>
             <Avatar
-              src={item.user.avatar || defaultImages.USER}
-              alt={item.user.name || defaultName.USER}
+              src={item.user.avatar}
               size={100}
               className='avatar__image'
             />

@@ -11,6 +11,7 @@ import { CLEAR_PROFILE } from '../profile/profile.constants';
 import { getAuthProfile } from '../profile/profile.actions';
 import { ASYNC_ACTION_CLEAR } from '../async/async.constants';
 import { actionTypes } from '../../app/utils/config';
+import { closeDrawer } from '../drawer/drawer.actions';
 
 const { auth: authAction } = actionTypes;
 
@@ -81,6 +82,7 @@ export const logout = () => dispatch => {
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: ASYNC_ACTION_CLEAR });
   dispatch({ type: LOGOUT_USER });
+  dispatch(closeDrawer());
 };
 
 export const initUser = () => dispatch => {

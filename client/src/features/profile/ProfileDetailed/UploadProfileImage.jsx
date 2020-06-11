@@ -13,6 +13,7 @@ const UpdateAvatar = ({ handleCancel, handleOpenImageLibrary }) => {
   const { loading, type } = useSelector(state => state.async);
   const [image, setImage] = useState(null);
   const [error, setError] = useState(null);
+  const [fileList, setFileList] = useState([]);
 
   const { profile: profileAction } = actionTypes;
 
@@ -20,6 +21,8 @@ const UpdateAvatar = ({ handleCancel, handleOpenImageLibrary }) => {
 
   const handleChangeImage = e => {
     setImage(e.file);
+    const files = e.fileList.map(file => ({ ...file, status: 'done' }));
+    setFileList(files);
     setError(null);
   };
 
@@ -49,6 +52,8 @@ const UpdateAvatar = ({ handleCancel, handleOpenImageLibrary }) => {
                     listType='picture-card'
                     onChange={handleChangeImage}
                     disabled={image}
+                    fileList={fileList}
+                    defaultFileList={[]}
                   >
                     <UploadOutlined />
                   </Upload>

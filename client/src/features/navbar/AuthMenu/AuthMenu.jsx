@@ -1,12 +1,13 @@
 import React from 'react';
 import './style.css';
 import { NavLink, Link } from 'react-router-dom';
-import { Menu, Dropdown, Avatar, Typography } from 'antd';
+import { Menu, Dropdown, Typography } from 'antd';
 import { LogoutOutlined, ProfileOutlined } from '@ant-design/icons';
-import { defaultImages, defaultName } from '../../../app/utils/config';
+import Avatar from '../../../app/layout/common/Avatar';
+import { defaultName } from '../../../app/utils/config';
 
 function AuthMenu({ mobile = false, authUser, logout, closeMenuMobile }) {
-  const { name = defaultName.USER, avatar = defaultImages.USER } = authUser;
+  const { name = defaultName.USER, avatar } = authUser;
 
   const menuClassName = mobile ? 'menubar--sm' : 'menubar--lg';
   const menuItemClassName = mobile ? 'menubar-item--sm' : 'menubar-item--lg';
@@ -81,6 +82,7 @@ function AuthMenu({ mobile = false, authUser, logout, closeMenuMobile }) {
             <Avatar
               src={avatar}
               alt={name}
+              style={{ marginRight: 8 }}
               className='avatar--header avatar__image'
             />
             {name}

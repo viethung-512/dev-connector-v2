@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Avatar, Typography, Button, List } from 'antd';
+import { Card, Typography, Button, List } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
-import { defaultImages } from '../../../app/utils/config';
+import Avatar from '../../../app/layout/common/Avatar';
 
 const { Title, Text } = Typography;
 
@@ -30,7 +30,7 @@ function ProfileItem({
           <div className='avatar'>
             <Avatar
               size={150}
-              src={avatar || defaultImages.USER}
+              src={avatar}
               alt={name}
               className='avatar__image'
             />
