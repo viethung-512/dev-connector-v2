@@ -1,6 +1,7 @@
 const Profile = require('../models/Profile');
 
 const addExperience = async (req, res, next) => {
+  const authUserId = req.user.id;
   const { title, company, location, from, to, current, description } = req.body;
 
   const newExp = {
@@ -14,7 +15,7 @@ const addExperience = async (req, res, next) => {
   };
 
   try {
-    const profile = await Profile.findOne({ user: req.user.id });
+    const profile = await Profile.findOne({ user: authUserId });
 
     profile.experience.unshift(newExp);
 
@@ -22,7 +23,7 @@ const addExperience = async (req, res, next) => {
 
     return res.json({ profile });
   } catch (err) {
-    console.error(err.name);
+    console.error(err, 'add experience');
     return next({ status: 500 });
   }
 };
@@ -30,10 +31,11 @@ const addExperience = async (req, res, next) => {
 const updateExperience = (req, res, next) => {};
 
 const deleteExperience = async (req, res, next) => {
+  const authUserId = req.user.id;
   const { expId } = req.params;
 
   try {
-    const profile = await Profile.findOne({ user: req.user.id });
+    const profile = await Profile.findOne({ user: authUserId });
     const newExperience = profile.experience.filter(ex => ex._id != expId);
 
     profile.experience = newExperience;
@@ -42,7 +44,7 @@ const deleteExperience = async (req, res, next) => {
 
     return res.json({ profile });
   } catch (err) {
-    console.error(err.message);
+    console.error(err, 'delete experience');
     return next({ status: 500 });
   }
 };

@@ -1,5 +1,5 @@
-const bcrypt = require('bcryptjs');
-const { generateToken, generateDefaultAvatar } = require('../utils/helper');
+const firebase = require('../utils/firebase');
+const { generateDefaultAvatar } = require('../utils/helper');
 
 const User = require('../models/User');
 
@@ -7,42 +7,29 @@ const login = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    let user = await User.findOne({ email });
+    const data = await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password);
 
-    if (!user || !user.enabled) {
-      return next({
-        status: 400,
-        message: 'Wrong credentials, please try again',
-      });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return next({
-        status: 400,
-        message: 'Wrong credentials, please try again',
-      });
-    }
-
-    const payload = {
-      user: { id: user.id },
-    };
-
-    const token = generateToken(payload);
+    const token = await data.user.getIdToken();
+    const user = await User.findOne({ uid: data.user.uid });
 
     return res.json({
       token,
       user: {
         _id: user.id,
+        uid: user.uid,
         name: user.name,
         email: user.email,
         avatar: user.avatar,
       },
     });
   } catch (err) {
-    console.log(err.message);
-    return next({ status: 500 });
+    console.log(err, 'login');
+    return next({
+      status: 400,
+      message: 'Wrong credentials,  please try again',
+    });
   }
 };
 
@@ -50,52 +37,40 @@ const register = async (req, res, next) => {
   const { name, email, password } = req.body;
 
   try {
-    let user = await User.findOne({ email });
-
+    const user = await User.findOne({ email });
     if (user) {
       return next({ status: 400, message: 'User already exists' });
     }
 
-    const avatar = generateDefaultAvatar(email);
+    const data = await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password);
+    const token = await data.user.getIdToken();
 
-    user = new User({
-      name,
-      email,
-      avatar,
-      password,
+    const newUser = new User({
+      uid: data.user.uid,
+      name: name,
+      email: data.user.email,
+      avatar: generateDefaultAvatar(email),
     });
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);
+    await newUser.save();
 
-    await user.save();
-
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
-    const token = generateToken(payload);
-    return res.status(201).json({
+    return res.json({
       token,
-      user: {
-        _id: user.id,
-        name: user.name,
-        email: user.email,
-        avatar: user.avatar,
-      },
+      user: newUser,
     });
   } catch (err) {
-    console.error(err.message);
+    console.log(err, 'register');
     return next({ status: 500 });
   }
 };
 
 const getAuthUser = async (req, res, next) => {
-  const userId = req.user.id;
+  const userId = req.user.uid;
 
   try {
-    const user = await User.findById(userId).select('-password');
+    const user = await User.findOne({ uid: userId });
 
     if (!user || !user.enabled) {
       return next({ status: 404, message: 'User not found' });
@@ -103,8 +78,12 @@ const getAuthUser = async (req, res, next) => {
 
     return res.json({ user });
   } catch (err) {
-    console.log(err);
+    console.log(err, 'get auth user');
   }
 };
 
-module.exports = { login, register, getAuthUser };
+module.exports = {
+  login,
+  register,
+  getAuthUser,
+};

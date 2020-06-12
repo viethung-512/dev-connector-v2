@@ -33,6 +33,10 @@ const ProfileSchema = new mongoose.Schema({
       url: {
         type: String,
       },
+      enabled: {
+        type: Boolean,
+        default: true,
+      },
     },
   ],
   experience: [

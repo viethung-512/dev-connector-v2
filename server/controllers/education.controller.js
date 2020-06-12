@@ -1,6 +1,8 @@
 const Profile = require('../models/Profile');
+const { auth } = require('../middleware/auth.middleware');
 
 const addEducation = async (req, res, next) => {
+  const authUserId = req.user.id;
   const {
     school,
     degree,
@@ -22,7 +24,7 @@ const addEducation = async (req, res, next) => {
   };
 
   try {
-    const profile = await Profile.findOne({ user: req.user.id });
+    const profile = await Profile.findOne({ user: authUserId });
 
     profile.education.unshift(newEdu);
 
@@ -30,7 +32,7 @@ const addEducation = async (req, res, next) => {
 
     return res.json({ profile });
   } catch (err) {
-    console.error(err.name);
+    console.error(err, 'add education');
     return next({ status: 500 });
   }
 };
@@ -38,10 +40,11 @@ const addEducation = async (req, res, next) => {
 const updateEducation = (req, res, next) => {};
 
 const deleteEducation = async (req, res, next) => {
+  const authUserId = req.user.id;
   const { eduId } = req.params;
 
   try {
-    const profile = await Profile.findOne({ user: req.user.id });
+    const profile = await Profile.findOne({ user: authUserId });
     const newEducation = profile.education.filter(ed => ed._id != eduId);
 
     profile.education = newEducation;
@@ -50,7 +53,7 @@ const deleteEducation = async (req, res, next) => {
 
     return res.json({ profile });
   } catch (err) {
-    console.error(err.name);
+    console.error(err, 'delete education');
     return next({ status: 500 });
   }
 };

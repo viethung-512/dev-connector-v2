@@ -19,6 +19,7 @@ const {
   deleteProfile,
   uploadProfileImage,
   changeProfileImage,
+  deletePhoto,
 } = require('../../controllers/profile.controller');
 
 router.use('/education', educationRoutes);
@@ -37,6 +38,7 @@ router.get('/user/:userId', getProfileByUser);
 router.put('/', auth, deleteProfile);
 router.post('/me/upload', auth, collectObjectField, uploadProfileImage);
 router.put('/me/changeAvatar/:avatarId', auth, changeProfileImage);
+router.put('/me/deletePhoto/:photoId', auth, deletePhoto);
 
 router.get('/github/:username', getGithubRepositories);
 

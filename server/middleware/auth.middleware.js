@@ -1,10 +1,10 @@
-const jwt = require('jsonwebtoken');
-const config = require('config');
+const firebaseAdmin = require('../utils/firebaseAdmin');
 const { responseMessage } = require('../utils/constants');
+
+const User = require('../models/User');
 
 const auth = async (req, res, next) => {
   let token;
-  const jwtSecret = config.get('jwtSecret');
 
   if (
     req.headers.authorization &&
@@ -15,13 +15,16 @@ const auth = async (req, res, next) => {
     return next({ status: 401 });
   }
   try {
-    const decoded = jwt.verify(token, jwtSecret);
-    const { user } = decoded;
+    const decoded = await firebaseAdmin.auth().verifyIdToken(token);
 
-    req.user = user;
+    const user = await User.findOne({ uid: decoded.uid });
+
+    const { id, uid, name, email, avatar } = user;
+
+    req.user = { id, uid, name, email, avatar };
     return next();
   } catch (err) {
-    console.log(err.name);
+    console.log(err.name, 'err name');
     if (err.name === 'TokenExpiredError') {
       return next({ status: 401, message: responseMessage.TOKEN_EXPIRED });
     }
@@ -29,7 +32,7 @@ const auth = async (req, res, next) => {
     if (err.name === 'JsonWebTokenError') {
       return next({ status: 401, message: responseMessage.TOKEN_INVALID });
     }
-    return next({ status: 500 });
+    return next({ status: 500, message: 'Error while verifying token' });
   }
 };
 

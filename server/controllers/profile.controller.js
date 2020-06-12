@@ -8,21 +8,22 @@ const Post = require('../models/Post');
 const { prepareProfileData } = require('../utils/helper');
 
 const createUpdateProfile = async (req, res, next) => {
+  const authUserId = req.user.id;
   const profileData = prepareProfileData(req.body);
 
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(authUserId);
 
     if (!user || !user.enabled) {
       return next({ status: 400, message: 'User not found' });
     }
 
-    profileData.user = req.user.id;
-    let profile = await Profile.findOne({ user: req.user.id, enabled: true });
+    profileData.user = authUserId;
+    let profile = await Profile.findOne({ user: authUserId, enabled: true });
 
     if (profile) {
       profile = await Profile.findOneAndUpdate(
-        { user: req.user.id },
+        { user: authUserId },
         {
           $set: profileData,
         },
@@ -47,23 +48,21 @@ const createUpdateProfile = async (req, res, next) => {
 
     return res.json({ profile });
   } catch (err) {
-    console.log(err);
+    console.log(err, 'create or update profile');
     return res.status(500).send('Server error');
   }
 };
 
 const deleteProfile = async (req, res, next) => {
-  const authId = req.user.id;
+  const authUserId = req.user.id;
 
   try {
-    await User.findByIdAndUpdate(authId, { enabled: false });
-    await Profile.findOneAndUpdate({ user: authId }, { enabled: false });
-    // await Profile.findOneAndDelete({ user: authId });
-    // await User.findByIdAndDelete(authId);
+    await User.findByIdAndUpdate(authUserId, { enabled: false });
+    await Profile.findOneAndUpdate({ user: authUserId }, { enabled: false });
 
     return res.json({ msg: 'User deleted' });
   } catch (err) {
-    console.error(err.name);
+    console.error(err, 'delete profile');
     return next({ status: 500 });
   }
 };
@@ -93,7 +92,7 @@ const uploadProfileImage = async (req, res, next) => {
 
     return res.json({ profile });
   } catch (err) {
-    console.error(err.name);
+    console.error(err, 'upload profile image');
     return next({ status: 500 });
   }
 };
@@ -130,6 +129,39 @@ const changeProfileImage = async (req, res, next) => {
     if (err.name == 'CastError') {
       return next({ status: 400, message: 'Avatar url is not exists' });
     }
+    console.log(err, 'change profile image');
+    return next({ status: 500 });
+  }
+};
+
+const deletePhoto = async (req, res, next) => {
+  const authUserId = req.user.id;
+  const { photoId } = req.params;
+
+  try {
+    let profile = await Profile.findOne({ user: authUserId });
+
+    if (!profile || !profile.enabled) {
+      return next({
+        status: 400,
+        message: 'There is no profile for this user',
+      });
+    }
+
+    await Profile.findOneAndUpdate(
+      { user: authUserId },
+      {
+        photos: profile.photos.map(photo =>
+          photo._id === photoId ? { ...photo, enabled: false } : photo
+        ),
+      }
+    );
+
+    profile = await Profile.findById(profile.id);
+
+    return res.json({ profile });
+  } catch (err) {
+    console.log(err, 'delete photo');
     return next({ status: 500 });
   }
 };
@@ -141,21 +173,23 @@ const getAllProfile = async (req, res, next) => {
 
     return res.json({ profiles });
   } catch (err) {
-    console.error(err.message);
+    console.error(err, 'get all profile');
     return next({ status: 500 });
   }
 };
 
 const getAuthProfile = async (req, res, next) => {
+  const authUserId = req.user.id;
+
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(authUserId);
 
     if (!user || !user.enabled) {
       return next({ status: 400, message: 'User not found' });
     }
 
     const profile = await Profile.findOne({
-      user: req.user.id,
+      user: authUserId,
     }).populate('user', ['name', 'avatar']);
 
     if (!profile || !profile.enabled) {
@@ -167,7 +201,7 @@ const getAuthProfile = async (req, res, next) => {
 
     return res.json({ profile });
   } catch (err) {
-    console.error(err.name);
+    console.error(err, 'get auth profile');
     return next({ status: 500 });
   }
 };
@@ -185,10 +219,11 @@ const getProfileByUser = async (req, res, next) => {
 
     return res.json({ profile });
   } catch (err) {
-    console.error(err.message);
+    console.error(err, 'get profile by user id');
     if (err.name == 'CastError') {
       return next({ status: 404, message: 'Profile not found' });
     }
+
     return next({ status: 500 });
   }
 };
@@ -216,7 +251,7 @@ const getGithubRepositories = async (req, res, next) => {
       return res.json(JSON.parse(body));
     });
   } catch (err) {
-    console.error(err.name);
+    console.error(err, 'get github repositories');
     return next({ status: 500 });
   }
 };
@@ -226,6 +261,7 @@ module.exports = {
   deleteProfile,
   uploadProfileImage,
   changeProfileImage,
+  deletePhoto,
   getAllProfile,
   getAuthProfile,
   getProfileByUser,

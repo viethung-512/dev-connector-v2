@@ -11,7 +11,7 @@ const getAllPost = async (req, res, next) => {
 
     return res.json({ posts });
   } catch (err) {
-    console.error(err.name);
+    console.error(err, 'get all post');
     return next({ status: 500 });
   }
 };
@@ -32,7 +32,7 @@ const getPostById = async (req, res, next) => {
     if (err.name == 'CastError') {
       return next({ status: 404, message: 'Post not found' });
     }
-    console.error(err.name);
+    console.error(err, 'get post by id');
     return next({ status: 500 });
   }
 };
@@ -55,12 +55,13 @@ const createPost = async (req, res, next) => {
 
     return res.json({ post });
   } catch (err) {
-    console.error(err.name);
+    console.error(err, 'create post');
     return next({ status: 500 });
   }
 };
 
 const deletePost = async (req, res, next) => {
+  const authUserId = req.user.id;
   const { postId } = req.params;
   try {
     const post = await Post.findById(postId);
@@ -69,7 +70,7 @@ const deletePost = async (req, res, next) => {
       return next({ status: 400, message: 'Post not found' });
     }
 
-    if (post.user.toString() !== req.user.id) {
+    if (post.user.toString() !== authUserId) {
       return next({ status: 403, message: 'User not authorized' });
     }
 
@@ -82,22 +83,23 @@ const deletePost = async (req, res, next) => {
     if (err.name == 'CastError') {
       return next({ status: 400, message: 'Post not found' });
     }
-    console.error(err.name);
+    console.error(err, 'delete post');
     return next({ status: 500 });
   }
 };
 
 const likePost = async (req, res, next) => {
+  const authUserId = req.user.id;
   const { postId } = req.params;
 
   try {
     let post = await Post.findById(postId);
 
-    if (post.likes.find(like => like.user.toString() === req.user.id)) {
+    if (post.likes.find(like => like.user.toString() === authUserId)) {
       return next({ status: 400, message: 'Post already liked' });
     }
 
-    post.likes.unshift({ user: req.user.id });
+    post.likes.unshift({ user: authUserId });
 
     await post.save();
 
@@ -110,23 +112,24 @@ const likePost = async (req, res, next) => {
     if (err.name == 'CastError') {
       return next({ status: 400, message: 'Post not found' });
     }
-    console.error(err.name);
+    console.error(err, 'like post');
     return next({ status: 500 });
   }
 };
 
 const unlikePost = async (req, res, next) => {
+  const authUserId = req.user.id;
   const { postId } = req.params;
 
   try {
     let post = await Post.findById(postId);
 
-    if (!post.likes.find(like => like.user.toString() === req.user.id)) {
+    if (!post.likes.find(like => like.user.toString() === authUserId)) {
       return next({ status: 400, message: "Post haven't been liked yet" });
     }
 
     const newLikes = post.likes.filter(
-      like => like.user.toString() !== req.user.id
+      like => like.user.toString() !== authUserId
     );
     post.likes = newLikes;
 
@@ -141,24 +144,24 @@ const unlikePost = async (req, res, next) => {
     if (err.name == 'CastError') {
       return next({ status: 400, message: 'Post not found' });
     }
-    console.error(err.name);
+    console.error(err, 'unlike post');
     return next({ status: 500 });
   }
 };
 
 const commentOnPost = async (req, res, next) => {
-  const userId = req.user.id;
+  const authUserId = req.user.id;
   const { postId } = req.params;
 
   try {
-    const user = await User.findById(userId).select('-password');
+    const user = await User.findById(authUserId);
     let post = await Post.findById(postId);
 
     const newComment = {
       text: req.body.text,
       name: user.name,
       avatar: user.avatar,
-      user: userId,
+      user: authUserId,
     };
 
     post.comments.unshift(newComment);
@@ -171,12 +174,13 @@ const commentOnPost = async (req, res, next) => {
 
     return res.json({ post });
   } catch (err) {
-    console.error(err.name);
+    console.error(err, 'comment on post');
     return next({ status: 500 });
   }
 };
 
 const deleteComment = async (req, res, next) => {
+  const authUserId = req.user.id;
   const { postId, commentId } = req.params;
   try {
     let post = await Post.findById(postId);
@@ -190,7 +194,7 @@ const deleteComment = async (req, res, next) => {
       return next({ status: 400, message: "Comment does' exist" });
     }
 
-    if (comment.user.toString() !== req.user.id) {
+    if (comment.user.toString() !== authUserId) {
       return next({ status: 403, message: 'User not authorized' });
     }
 
@@ -210,7 +214,7 @@ const deleteComment = async (req, res, next) => {
     if (err.name == 'CastError') {
       return next({ status: 400, message: 'Post not found' });
     }
-    console.error(err.name);
+    console.error(err, 'delete comment');
     return next({ status: 500 });
   }
 };
