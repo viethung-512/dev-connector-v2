@@ -2,11 +2,21 @@ import React from 'react';
 import './style.css';
 import { NavLink, Link } from 'react-router-dom';
 import { Menu, Dropdown, Typography } from 'antd';
-import { LogoutOutlined, ProfileOutlined } from '@ant-design/icons';
+import {
+  LogoutOutlined,
+  ProfileOutlined,
+  FormOutlined,
+} from '@ant-design/icons';
 import Avatar from '../../../app/layout/common/Avatar';
 import { defaultName } from '../../../app/utils/config';
 
-function AuthMenu({ mobile = false, authUser, logout, closeMenuMobile }) {
+function AuthMenu({
+  mobile = false,
+  authUser,
+  logout,
+  closeMenuMobile,
+  createArticle,
+}) {
   const { name = defaultName.USER, avatar } = authUser;
 
   const menuClassName = mobile ? 'menubar--sm' : 'menubar--lg';
@@ -17,6 +27,13 @@ function AuthMenu({ mobile = false, authUser, logout, closeMenuMobile }) {
 
   const useMenu = (
     <Menu mode='vertical'>
+      <Menu.Item
+        key='create-article'
+        icon={<FormOutlined />}
+        onClick={createArticle}
+      >
+        Create new Article
+      </Menu.Item>
       <Menu.Item
         key='profile'
         icon={<ProfileOutlined />}
@@ -44,6 +61,19 @@ function AuthMenu({ mobile = false, authUser, logout, closeMenuMobile }) {
           activeClassName='menubar-item-link--active'
         >
           Developers
+        </NavLink>
+      </Menu.Item>
+      <Menu.Item
+        className={menuItemClassName}
+        key='blog'
+        onClick={closeMenuMobile}
+      >
+        <NavLink
+          to='/blog'
+          className={menuItemLinkClassName}
+          activeClassName='menubar-item-link--active'
+        >
+          Blog
         </NavLink>
       </Menu.Item>
       <Menu.Item

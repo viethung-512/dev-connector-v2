@@ -7,6 +7,7 @@ import { reducer as toastrReducer } from 'react-redux-toastr';
 import authReducer from '../../features/auth/auth.reducer';
 import profileReducer from '../../features/profile/profile.reducer';
 import postReducer from '../../features/post/post.reducer';
+import articleReducer from '../../features/blog/article.reducer';
 
 export default combineReducers({
   async: asyncReducer,
@@ -16,4 +17,5 @@ export default combineReducers({
   auth: authReducer,
   profile: profileReducer,
   post: postReducer,
+  blog: articleReducer,
 });

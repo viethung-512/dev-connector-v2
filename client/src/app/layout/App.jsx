@@ -21,6 +21,9 @@ import ProfileDetailed from '../../features/profile/ProfileDetailed/ProfileDetai
 import PostPage from '../../features/post/post-component/PostPage';
 import PostDetailed from '../../features/post/post-component/PostDetailed';
 import ScrollToTop from './common/ScollToTop';
+import AllArticlePage from '../../features/blog/Articles/AllArticlePage';
+import ArticleDetailedPage from '../../features/blog/ArticleDetailed/ArticleDetailedPage';
+import UserArticlesPage from '../../features/blog/Articles/UserArticlesPage';
 
 const { Content } = Layout;
 
@@ -67,6 +70,22 @@ const App = () => {
                     exact
                     path='/posts/:postId'
                     component={PostDetailed}
+                  />
+                  <Route exact path='/blog' component={AllArticlePage} />
+                  <Route
+                    exact
+                    path='/blog/:articleId'
+                    component={ArticleDetailedPage}
+                  />
+                  <Route
+                    exact
+                    path='/blog/user/:userId'
+                    component={UserArticlesPage}
+                  />
+                  <PrivateRoute
+                    exact
+                    path='/blog/me'
+                    component={UserArticlesPage}
                   />
                   <Route exact path='/developers' component={Developers} />
                   <Route

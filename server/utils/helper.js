@@ -60,10 +60,13 @@ const prepareProfileData = body => {
   return profileFields;
 };
 
+const isEmpty = string => string.trim(' ') === '';
+
 module.exports = {
   generateToken,
   generateDefaultAvatar,
   prepareProfileData,
   getDownloadUrl,
   generateImageFileName,
+  isEmpty,
 };

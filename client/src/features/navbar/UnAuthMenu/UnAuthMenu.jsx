@@ -26,6 +26,19 @@ function UnAuthMenu({ mobile = false, register, login, closeMenuMobile }) {
       </Menu.Item>
       <Menu.Item
         className={menuItemClassName}
+        key='blog'
+        onClick={closeMenuMobile}
+      >
+        <NavLink
+          to='/blog'
+          className={menuItemLinkClassName}
+          activeClassName='menubar-item-link--active'
+        >
+          Blog
+        </NavLink>
+      </Menu.Item>
+      <Menu.Item
+        className={menuItemClassName}
         key='register'
         onClick={register}
       >
