@@ -87,5 +87,4 @@ export const logout = () => dispatch => {
 
 export const initUser = () => dispatch => {
   dispatch(getAuthUser());
-  dispatch(getAuthProfile());
 };

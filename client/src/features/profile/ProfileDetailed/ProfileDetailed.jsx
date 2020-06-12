@@ -3,12 +3,7 @@ import './style.css';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import GithubRepos from './GithubRepos';
-import {
-  getProfile,
-  getGithubRepositories,
-  clearProfile,
-  getAuthProfile,
-} from '../profile.actions';
+import { getProfile, clearProfile, getAuthProfile } from '../profile.actions';
 import { Spin } from 'antd';
 import { LoadingIcon } from '../../../app/layout/common/Icons';
 import Header from './Header/Header';
@@ -27,8 +22,6 @@ function ProfileDetailed(props) {
 
   const { profile: profileAction } = actionTypes;
 
-  const githubUsername =
-    profile && profile.githubUsername ? profile.githubUsername : null;
   const loadingRepos =
     type === profileAction.GET_GITHUB_REPOSITORIES ? loading : false;
   const loadingProfile = type === profileAction.GET_PROFILE ? loading : false;
@@ -48,14 +41,6 @@ function ProfileDetailed(props) {
 
     // eslint-disable-next-line
   }, [userId]);
-
-  useEffect(() => {
-    if (githubUsername) {
-      dispatch(getGithubRepositories(githubUsername));
-    }
-
-    // eslint-disable-next-line
-  }, [profile, githubUsername]);
 
   const openProfileAction = () =>
     dispatch(openDrawer('ProfileAction', { profile }));

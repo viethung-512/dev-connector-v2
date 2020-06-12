@@ -93,6 +93,12 @@ export const getAuthProfile = history => async dispatch => {
   try {
     const res = await axios.get('/api/profile/me');
     const { profile } = res.data;
+    const githubUsername =
+      profile && profile.githubUsername ? profile.githubUsername : null;
+
+    if (githubUsername) {
+      dispatch(getGithubRepositories(githubUsername));
+    }
 
     dispatch({ type: SET_CURRENT_PROFILE, payload: { profile } });
     dispatch(asyncActionFinish());
@@ -117,6 +123,12 @@ export const getProfile = userId => async dispatch => {
   try {
     const res = await axios.get(`/api/profile/user/${userId}`);
     const { profile } = res.data;
+    const githubUsername =
+      profile && profile.githubUsername ? profile.githubUsername : null;
+
+    if (githubUsername) {
+      dispatch(getGithubRepositories(githubUsername));
+    }
 
     dispatch({ type: SET_CURRENT_PROFILE, payload: { profile } });
     dispatch(asyncActionFinish());
@@ -131,22 +143,13 @@ export const getProfile = userId => async dispatch => {
 };
 
 export const getGithubRepositories = githubUsername => async dispatch => {
-  dispatch(asyncActionStart(profileAction.GET_GITHUB_REPOSITORIES));
-
   try {
     const res = await axios.get(`/api/profile/github/${githubUsername}`);
     const repositories = res.data;
 
     dispatch({ type: SET_REPOSITORIES, payload: { repositories } });
-    dispatch(asyncActionFinish());
   } catch (err) {
     dispatch({ type: SET_REPOSITORIES, payload: { repositories: [] } });
-    dispatch(
-      asyncActionError({
-        msg: err.response.statusText,
-        status: err.response.status,
-      })
-    );
   }
 };
 
