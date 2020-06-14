@@ -1,5 +1,6 @@
 export const defaultImages = {
   USER: '/assets/user.jpg',
+  ARTICLE: '/assets/default-image.jpg',
 };
 
 export const defaultName = {
@@ -39,4 +40,32 @@ export const actionTypes = {
     DELETE_EDUCATION: 'DELETE_EDUCATION',
     DELETE_ACCOUNT: 'DELETE_ACCOUNT',
   },
+  blog: {
+    GET_MOST_VIEW: 'GET_MOST_VIEW',
+    GET_ARTICLES: 'GET_ARTICLES',
+    GET_ARTICLE: 'GET_ARTICLE',
+    CREATE_UPDATE_ARTICLE: 'CREATE_UPDATE_ARTICLE',
+    LIKE_ARTICLE: 'LIKE_ARTICLE',
+    DISLIKE_ARTICLE: 'DISLIKE_ARTICLE',
+    COMMENT_ON_ARTICLE: 'COMMENT_ON_ARTICLE',
+    DELETE_COMMENT: 'DELETE_COMMENT',
+    DELETE_ARTICLE: 'DELETE_ARTICLE',
+  },
+};
+
+export const pagination = {
+  limit: 3,
+};
+
+export const pageTypes = {
+  article: {
+    ALL: 'ALL',
+    USER: 'USER',
+    AUTH: 'AUTH',
+  },
+};
+
+export const routeTypes = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE',
 };

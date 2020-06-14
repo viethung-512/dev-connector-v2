@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import ModalLogin from './auth/ModalLogin';
 import ModalRegister from './auth/ModalRegister';
+import UnAuthModal from './auth/UnAuthModal';
 import UploadImage from './profile/UploadImage';
 import LibImage from './profile/LibImageModal';
 
@@ -10,6 +11,7 @@ const modalLookup = {
   Register: ModalRegister,
   UploadProfileImage: UploadImage,
   LibImageModal: LibImage,
+  UnAuth: UnAuthModal,
 };
 
 function ModalManger(props) {

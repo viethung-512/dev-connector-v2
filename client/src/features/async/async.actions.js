@@ -10,7 +10,9 @@ export const asyncActionStart = (actionType, elmId) => ({
   payload: { actionType, elmId },
 });
 
-export const asyncActionFinish = () => ({ type: ASYNC_ACTION_FINISH });
+export const asyncActionFinish = () => ({
+  type: ASYNC_ACTION_FINISH,
+});
 
 export const asyncActionError = err => ({
   type: ASYNC_ACTION_ERROR,

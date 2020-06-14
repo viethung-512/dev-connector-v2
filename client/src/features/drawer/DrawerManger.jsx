@@ -4,12 +4,14 @@ import MenuMobileDrawer from './navbar/MenuMobileDrawer';
 import ProfileActionDrawer from './profile/ProfileAction';
 import EducationActionDrawer from './profile/EducationAction';
 import ExperienceActionDrawer from './profile/ExperienceAction';
+import ArticleActionDrawer from './article/ArticleActionDrawer';
 
 const drawerLookup = {
   MenuMobile: MenuMobileDrawer,
   ProfileAction: ProfileActionDrawer,
   EducationAction: EducationActionDrawer,
   ExperienceAction: ExperienceActionDrawer,
+  ArticleAction: ArticleActionDrawer,
 };
 
 function DrawerManger(props) {

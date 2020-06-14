@@ -1,0 +1,25 @@
+/* articles page */
+.articles-page__title,
+.article-detail__title {
+  margin-bottom: 32px !important;
+}
+
+/* article item */
+.article-item {
+  /* display: flex;
+  flex-direction: row; */
+
+  width: 100%;
+}
+
+.article-item__main-photo-img {
+  width: 100%;
+}
+
+.article-item__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  height: 100%;
+}

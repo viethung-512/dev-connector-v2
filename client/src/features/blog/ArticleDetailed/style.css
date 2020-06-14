@@ -1,0 +1,18 @@
+.article-detailed__sidebar-avatar {
+  text-align: center;
+}
+
+.article-detailed__sidebar-name {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.article-detail__main-like {
+  text-align: center;
+}
+
+.article-detail__main-img {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}

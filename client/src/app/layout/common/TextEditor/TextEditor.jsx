@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { ImageResize } from './ImageResize';
 import { Video } from './quill-video-resize';
 import './quill-video-resize.css';
@@ -62,6 +63,8 @@ const TextEditor = ({ handleChange, text, clearContent, quillRef }) => {
     return () => {
       clearContent();
     };
+
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -72,7 +75,7 @@ const TextEditor = ({ handleChange, text, clearContent, quillRef }) => {
       formats={formats}
       placeholder={'Enter new content here...'}
       ref={quillRef}
-      style={{ height: '300px' }}
+      theme='snow'
     />
   );
 };

@@ -1,0 +1,27 @@
+.helper-text {
+  text-align: center;
+}
+
+.actions-required {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 8px;
+}
+
+.actions-required-item {
+  flex: 1;
+}
+
+.actions-required-item--login {
+  margin-right: 8px;
+}
+
+.actions-required-item--register {
+  margin-left: 8px;
+}
+
+.actions-cancel {
+  text-align: center;
+}

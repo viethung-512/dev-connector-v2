@@ -7,23 +7,18 @@ import { useDispatch } from 'react-redux';
 import { Layout } from 'antd';
 
 import { setDefaultAxios } from '../utils/helper';
+
 import ModalManager from '../../features/modal/ModalManger';
 import DrawerManager from '../../features/drawer/DrawerManger';
 import Toastr from './common/Toastr';
 import Navbar from '../../features/navbar/Navbar';
 import HomePage from '../../features/homepage/HomePage';
+import ScrollToTop from './common/ScollToTop';
+
 import { initUser } from '../../features/auth/auth.actions';
 import { asyncActionClear } from '../../features/async/async.actions';
-import Dashboard from '../../features/dashboard/Dashboard';
-import PrivateRoute from './common/PrivateRoute';
-import Developers from '../../features/profile/Developers/DevelopersPage';
-import ProfileDetailed from '../../features/profile/ProfileDetailed/ProfileDetailed';
-import PostPage from '../../features/post/post-component/PostPage';
-import PostDetailed from '../../features/post/post-component/PostDetailed';
-import ScrollToTop from './common/ScollToTop';
-import AllArticlePage from '../../features/blog/Articles/AllArticlePage';
-import ArticleDetailedPage from '../../features/blog/ArticleDetailed/ArticleDetailedPage';
-import UserArticlesPage from '../../features/blog/Articles/UserArticlesPage';
+
+import renderMenuItem from '../../routes';
 
 const { Content } = Layout;
 
@@ -34,7 +29,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(asyncActionClear());
+    // dispatch(asyncActionClear());
     if (token) {
       dispatch(initUser());
     }
@@ -45,6 +40,7 @@ const App = () => {
 
     // eslint-disable-next-line
   }, [token]);
+
   return (
     <div className='app'>
       <ScrollToTop />
@@ -58,42 +54,7 @@ const App = () => {
             <Layout>
               <Navbar />
               <Content className='app-content'>
-                <Switch>
-                  <PrivateRoute exact path='/dashboard' component={Dashboard} />
-                  <PrivateRoute
-                    exact
-                    path='/profile/me'
-                    component={ProfileDetailed}
-                  />
-                  <PrivateRoute exact path='/posts' component={PostPage} />
-                  <PrivateRoute
-                    exact
-                    path='/posts/:postId'
-                    component={PostDetailed}
-                  />
-                  <Route exact path='/blog' component={AllArticlePage} />
-                  <Route
-                    exact
-                    path='/blog/:articleId'
-                    component={ArticleDetailedPage}
-                  />
-                  <Route
-                    exact
-                    path='/blog/user/:userId'
-                    component={UserArticlesPage}
-                  />
-                  <PrivateRoute
-                    exact
-                    path='/blog/me'
-                    component={UserArticlesPage}
-                  />
-                  <Route exact path='/developers' component={Developers} />
-                  <Route
-                    exact
-                    path='/profile/:userId'
-                    component={ProfileDetailed}
-                  />
-                </Switch>
+                <Switch>{renderMenuItem()}</Switch>
               </Content>
             </Layout>
           )}

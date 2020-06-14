@@ -1,6 +1,19 @@
 const Article = require('../models/Article');
 const User = require('../models/User');
 
+const getMostViewArticle = async (req, res, next) => {
+  try {
+    const articles = await Article.find({ enabled: true })
+      .sort({ views: -1 })
+      .limit(5);
+
+    return res.json({ articles });
+  } catch (err) {
+    console.log(err, 'get most view article');
+    return next({ status: 500 });
+  }
+};
+
 const getAllArticle = async (req, res, next) => {
   const { page = 1, limit = 10 } = req.query;
 
@@ -20,6 +33,7 @@ const getAllArticle = async (req, res, next) => {
             select: ['name', 'avatar'],
           },
         ],
+        sort: { date: -1 },
       }
     );
 
@@ -50,6 +64,7 @@ const getAuthArticle = async (req, res, next) => {
             select: ['name', 'avatar'],
           },
         ],
+        sort: { date: -1 },
       }
     );
 
@@ -80,6 +95,7 @@ const getUserArticles = async (req, res, next) => {
             select: ['name', 'avatar'],
           },
         ],
+        sort: { date: -1 },
       }
     );
 
@@ -367,6 +383,7 @@ const deleteComment = async (req, res, next) => {
 };
 
 module.exports = {
+  getMostViewArticle,
   getAllArticle,
   getAuthArticle,
   getUserArticles,

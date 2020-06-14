@@ -9,6 +9,7 @@ const {
 } = require('../../utils/validators/article.validator');
 const validate = require('../../utils/validators/index');
 const {
+  getMostViewArticle,
   getAllArticle,
   getAuthArticle,
   getUserArticles,
@@ -22,6 +23,7 @@ const {
   deleteComment,
 } = require('../../controllers/article.controller');
 
+router.get('/most-view', getMostViewArticle);
 router.get('/', getAllArticle);
 router.get('/me', auth, getAuthArticle);
 router.get('/user/:id', getUserArticles);

@@ -10,13 +10,7 @@ import {
 import Avatar from '../../../app/layout/common/Avatar';
 import { defaultName } from '../../../app/utils/config';
 
-function AuthMenu({
-  mobile = false,
-  authUser,
-  logout,
-  closeMenuMobile,
-  createArticle,
-}) {
+function AuthMenu({ mobile = false, authUser, logout, closeMenuMobile }) {
   const { name = defaultName.USER, avatar } = authUser;
 
   const menuClassName = mobile ? 'menubar--sm' : 'menubar--lg';
@@ -30,9 +24,11 @@ function AuthMenu({
       <Menu.Item
         key='create-article'
         icon={<FormOutlined />}
-        onClick={createArticle}
+        onClick={closeMenuMobile}
       >
-        Create new Article
+        <Link to='/blog/create'>
+          <Typography.Text>Create new Article</Typography.Text>
+        </Link>
       </Menu.Item>
       <Menu.Item
         key='profile'
