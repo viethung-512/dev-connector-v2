@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import AddItem from '../AddItem';
 import Item from '../Item';
 import { getPost, commentOnPost, deleteComment } from '../post.actions';
-import { Divider, Button, Spin } from 'antd';
-import { LoadingIcon } from '../../../app/layout/common/Icons';
+import { Divider, PageHeader } from 'antd';
 import Comments from '../comment/Comments';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 import { actionTypes } from '../../../app/utils/config';
+import LoadingGrid from '../../../app/layout/common/loading/LoadingGrid';
+import { breadcrumbRenderItem } from '../../../app/utils/helper';
 
 function PostDetailed(props) {
   const dispatch = useDispatch();
@@ -17,12 +17,7 @@ function PostDetailed(props) {
   const { user: authUser } = useSelector(state => state.auth);
   const { loading, type, elmId } = useSelector(state => state.async);
 
-  const { post: postAction } = actionTypes;
-
-  const loadingPost = type === postAction.GET_POST ? loading : false;
-  const commentLoading = type === postAction.COMMENT_ON_POST ? loading : false;
-
-  const postDetailedLoading = loadingPost;
+  const postAction = actionTypes.post;
 
   useEffect(() => {
     if (postId) {
@@ -38,18 +33,27 @@ function PostDetailed(props) {
   const handleDeleteComment = commentId =>
     dispatch(deleteComment(commentId, postId));
 
+  const routes = [
+    {
+      path: 'dashboard',
+      breadcrumbName: 'Dashboard',
+    },
+    {
+      path: 'posts',
+      breadcrumbName: 'Posts',
+    },
+    {
+      breadcrumbName: 'Post Detail',
+    },
+  ];
+
   return (
     <div className='post'>
-      <Spin spinning={postDetailedLoading} indicator={LoadingIcon}>
-        <Link to='/posts'>
-          <Button
-            type='default'
-            icon={<ArrowLeftOutlined />}
-            style={{ marginBottom: 12 }}
-          >
-            Back To Posts
-          </Button>
-        </Link>
+      <LoadingGrid loadingTypes={[postAction.GET_POST]}>
+        <PageHeader
+          style={{ paddingLeft: 0, paddingRight: 0 }}
+          breadcrumb={{ itemRender: breadcrumbRenderItem, routes }}
+        />
         {post && authUser && (
           <Item
             item={post}
@@ -63,7 +67,7 @@ function PostDetailed(props) {
           placeholder='Comment on this post'
           title='Leave A Comment'
           onSubmit={handleComment}
-          loading={commentLoading}
+          createLoadingTypes={[postAction.COMMENT_ON_POST]}
         />
         {post && (
           <Comments
@@ -73,9 +77,12 @@ function PostDetailed(props) {
             loading={loading}
             loadingType={type}
             loadingElm={elmId}
+            likeLoadingTypes={[postAction.LIKE_POST]}
+            unlikeLoadingTypes={[postAction.UNLIKE_POST]}
+            deleteLoadingTypes={[postAction.DELETE_COMMENT]}
           />
         )}
-      </Spin>
+      </LoadingGrid>
     </div>
   );
 }

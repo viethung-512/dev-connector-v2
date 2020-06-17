@@ -4,24 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import Profiles from './Profiles';
 import { getProfiles } from '../profile.actions';
 import Header from './Header';
-import { Spin } from 'antd';
-import { LoadingIcon } from '../../../app/layout/common/Icons';
 import { actionTypes } from '../../../app/utils/config';
+import LoadingGrid from '../../../app/layout/common/loading/LoadingGrid';
 
 function DevelopersPage(props) {
   const dispatch = useDispatch();
   const { _id: authUserId } = useSelector(state => state.auth.user);
   const profiles = useSelector(state => state.profile.profiles);
-  const { type, loading } = useSelector(state => state.async);
 
   const { profile: profileAction } = actionTypes;
-
-  const getAuthProfileLoading =
-    type === profileAction.GET_PROFILE ? loading : false;
-  const getProfilesLoading =
-    type === profileAction.GET_PROFILES ? loading : false;
-
-  const dashboardLoading = getAuthProfileLoading || getProfilesLoading;
 
   useEffect(() => {
     if (authUserId) {
@@ -34,10 +25,12 @@ function DevelopersPage(props) {
   }, [authUserId]);
 
   return (
-    <Spin spinning={dashboardLoading} indicator={LoadingIcon}>
-      <Header />
+    <LoadingGrid
+      loadingTypes={[profileAction.GET_PROFILES, profileAction.GET_PROFILE]}
+    >
+      <Header authUserId={authUserId} />
       <Profiles profiles={profiles} />
-    </Spin>
+    </LoadingGrid>
   );
 }
 

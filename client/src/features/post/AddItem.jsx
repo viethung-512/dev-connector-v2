@@ -1,8 +1,9 @@
 import React from 'react';
 import './style.css';
-import { Form, Input, Button } from 'antd';
+import { Form, Input } from 'antd';
+import LoadingButton from '../../app/layout/common/loading/LoadingButton';
 
-function AddItem({ title, placeholder, onSubmit, loading }) {
+function AddItem({ title, placeholder, onSubmit, createLoadingTypes }) {
   const [form] = Form.useForm();
 
   const handleCreatePost = values => {
@@ -21,15 +22,15 @@ function AddItem({ title, placeholder, onSubmit, loading }) {
           <Input.TextArea rows={4} placeholder={placeholder} />
         </Form.Item>
         <Form.Item>
-          <Button
+          <LoadingButton
+            loadingTypes={createLoadingTypes}
             type='default'
             htmlType='submit'
             className='btn btn--dark add-item__submit'
             size='large'
-            loading={loading}
           >
             Submit
-          </Button>
+          </LoadingButton>
         </Form.Item>
       </Form>
     </div>

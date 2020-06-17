@@ -1,22 +1,23 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input } from 'antd';
+import LoadingButton from '../../../app/layout/common/loading/LoadingButton';
 
 const { TextArea } = Input;
 
-const CommentEditor = ({ onChange, onSubmit, submitting, value }) => (
+const CommentEditor = ({ onChange, onSubmit, loadingTypes, value }) => (
   <>
     <Form.Item>
       <TextArea rows={4} onChange={onChange} value={value} />
     </Form.Item>
     <Form.Item>
-      <Button
+      <LoadingButton
+        loadingTypes={loadingTypes}
         htmlType='submit'
-        loading={submitting}
         onClick={onSubmit}
         type='primary'
       >
-        Comment
-      </Button>
+        Commend
+      </LoadingButton>
     </Form.Item>
   </>
 );

@@ -1,18 +1,16 @@
 import React, { Fragment } from 'react';
-import { List, Comment, Button, Typography } from 'antd';
+import { List, Comment, Typography } from 'antd';
 import { formatDate } from '../../../app/utils/helper';
 import { DeleteOutlined } from '@ant-design/icons';
-import { actionTypes } from '../../../app/utils/config';
+import LoadingButton from '../../../app/layout/common/loading/LoadingButton';
 
 const { Text } = Typography;
 
 function Comments({
   comments,
   authUserId,
-  loading,
-  loadingType,
-  elmId,
   deleteComment,
+  deleteCommentLoadingTypes,
 }) {
   return (
     <Fragment>
@@ -28,20 +26,16 @@ function Comments({
                 actions={
                   cmt.user._id === authUserId
                     ? [
-                        <Button
+                        <LoadingButton
+                          loadingTypes={deleteCommentLoadingTypes}
+                          loadingElm={cmt._id}
                           icon={<DeleteOutlined />}
                           type='link'
                           danger
-                          loading={
-                            loadingType === actionTypes.blog.DELETE_COMMENT &&
-                            elmId === cmt._id
-                              ? loading
-                              : false
-                          }
                           onClick={() => deleteComment(cmt._id)}
                         >
                           Delete comment
-                        </Button>,
+                        </LoadingButton>,
                       ]
                     : []
                 }

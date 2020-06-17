@@ -7,7 +7,7 @@ import {
   UNLIKE_POST,
   DELETE_POST,
   COMMENT_ON_POST,
-  DELETE_COMMENT,
+  DELETE_POST_COMMENT,
 } from './post.constants';
 
 const postReducerInitialState = {
@@ -37,7 +37,7 @@ const postReducer = (state = postReducerInitialState, { type, payload }) => {
 
     case SET_CURRENT_POST:
     case COMMENT_ON_POST:
-    case DELETE_COMMENT:
+    case DELETE_POST_COMMENT:
       return {
         ...state,
         current: payload.post,

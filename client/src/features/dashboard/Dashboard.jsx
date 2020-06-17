@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import './style.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { Spin, Divider } from 'antd';
-import { LoadingIcon } from '../../app/layout/common/Icons';
+import { Divider } from 'antd';
 import DashboardHeader from './Header/DashboardHeader';
 import DashboardContainer from './Container/DashboardContainer';
 import DashboardAction from './Actions/DashboardActions';
@@ -16,10 +15,10 @@ import {
 import { openDrawer } from '../drawer/drawer.actions';
 import NotFoundProfile from '../profile/NotFoundProfile';
 import { actionTypes } from '../../app/utils/config';
+import LoadingGrid from '../../app/layout/common/loading/LoadingGrid';
 
 function Dashboard(props) {
   const dispatch = useDispatch();
-  const { loading, type, elmId } = useSelector(state => state.async);
 
   const user = useSelector(state => state.auth.user);
   const profile = useSelector(state => state.profile.current);
@@ -35,16 +34,7 @@ function Dashboard(props) {
     // eslint-disable-next-line
   }, []);
 
-  const { profile: profileAction } = actionTypes;
-
-  const getProfileLoading =
-    type === profileAction.GET_PROFILE ? loading : false;
-  const exDeleteLoading =
-    type === profileAction.DELETE_EXPERIENCE ? loading : false;
-  const edDeleteLoading =
-    type === profileAction.DELETE_EDUCATION ? loading : false;
-  const accDeleteLoading =
-    type === profileAction.DELETE_ACCOUNT ? loading : false;
+  const profileAction = actionTypes.profile;
 
   const handleAddExperience = () => dispatch(openDrawer('ExperienceAction'));
   const handleAddEducation = () => dispatch(openDrawer('EducationAction'));
@@ -56,7 +46,7 @@ function Dashboard(props) {
     dispatch(openDrawer('ProfileAction', { profile }));
 
   return (
-    <Spin spinning={getProfileLoading} indicator={LoadingIcon}>
+    <LoadingGrid loadingTypes={[profileAction.GET_PROFILE]}>
       <div className='dashboard'>
         <DashboardHeader
           user={user}
@@ -74,9 +64,8 @@ function Dashboard(props) {
             addEducation={handleAddEducation}
             deleteExperience={handleDeleteExperience}
             deleteEducation={handleDeleteEducation}
-            exDeleteLoading={exDeleteLoading}
-            edDeleteLoading={edDeleteLoading}
-            elmId={elmId}
+            exLoadingTypes={[profileAction.DELETE_EXPERIENCE]}
+            edLoadingTypes={[profileAction.DELETE_EDUCATION]}
           />
         ) : (
           <NotFoundProfile openProfileAction={openProfileAction} />
@@ -85,10 +74,10 @@ function Dashboard(props) {
         <Divider />
         <DashboardAction
           deleteAccount={handleDeleteAccount}
-          loading={accDeleteLoading}
+          loadingTypes={[profileAction.DELETE_ACCOUNT]}
         />
       </div>
-    </Spin>
+    </LoadingGrid>
   );
 }
 

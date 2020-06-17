@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './style.css';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Col, Spin, Typography } from 'antd';
+import { Row, Col, Typography, PageHeader } from 'antd';
 import {
   clearArticle,
   getArticleById,
@@ -10,12 +10,14 @@ import {
   deleteComment,
   likeArticle,
   dislikeArticle,
+  getRelatedArticles,
 } from '../article.actions';
 
 import MainContent from './MainContent';
 import { actionTypes } from '../../../app/utils/config';
-import { LoadingIcon } from '../../../app/layout/common/Icons';
 import AuthorSidebar from '../AuthorSidebar';
+import LoadingGrid from '../../../app/layout/common/loading/LoadingGrid';
+import { breadcrumbRenderItem } from '../../../app/utils/helper';
 
 const { Title } = Typography;
 
@@ -24,7 +26,7 @@ function ArticleDetailedPage(props) {
   const dispatch = useDispatch();
   const { user: authUser, authenticated } = useSelector(state => state.auth);
   let currentArticle = useSelector(state => state.blog.current);
-  const { loading, type, elmId } = useSelector(state => state.async);
+  const { related: relatedArticle } = useSelector(state => state.blog);
 
   const { articleId } = params;
 
@@ -34,6 +36,7 @@ function ArticleDetailedPage(props) {
   useEffect(() => {
     if (articleId) {
       dispatch(getArticleById(articleId));
+      dispatch(getRelatedArticles(articleId));
     }
 
     return () => {
@@ -54,14 +57,22 @@ function ArticleDetailedPage(props) {
   const handleLikeArticle = id => dispatch(likeArticle(id));
   const handleDislikeArticle = id => dispatch(dislikeArticle(id));
 
-  const articleDetailLoading =
-    (type === actionTypes.blog.GET_ARTICLE && elmId === articleId) ||
-    type === actionTypes.auth.GET_AUTH_USER
-      ? loading
-      : false;
-
-  const commentLoading =
-    type === actionTypes.blog.COMMENT_ON_ARTICLE ? loading : false;
+  const blogAction = actionTypes.blog;
+  const authAction = actionTypes.auth;
+  const routes = [
+    {
+      path: authenticated ? 'dashboard' : 'developers',
+      breadcrumbName: authenticated ? 'Dashboard' : 'Developers',
+    },
+    {
+      path: 'blog',
+      breadcrumbName: 'Blog',
+    },
+    {
+      path: currentArticle.title,
+      breadcrumbName: currentArticle.title,
+    },
+  ];
 
   const likeCount =
     currentArticle && currentArticle.likes ? currentArticle.likes.length : 0;
@@ -71,27 +82,36 @@ function ArticleDetailedPage(props) {
       : 0;
 
   return (
-    <Spin spinning={articleDetailLoading} indicator={LoadingIcon}>
+    <LoadingGrid
+      loadingTypes={[blogAction.GET_ARTICLE, authAction.GET_AUTH_USER]}
+    >
       <div className='article-detail'>
-        <Title className='primary article-detail__title'>
-          {currentArticle.title}
-        </Title>
+        <PageHeader
+          style={{ paddingLeft: 0, paddingRight: 0 }}
+          title={
+            <Title className='primary article-detail__title'>
+              {currentArticle.title}
+            </Title>
+          }
+          breadcrumb={{ itemRender: breadcrumbRenderItem, routes }}
+        />
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={24} md={18} lg={18} xl={18}>
             <MainContent
               article={currentArticle}
               submitComment={handleSubmit}
-              submitting={commentLoading}
               authUser={authUser}
               authenticated={authenticated}
-              loading={loading}
-              loadingType={type}
-              elmId={elmId}
               deleteComment={handleDeleteComment}
               likeArticle={handleLikeArticle}
               dislikeArticle={handleDislikeArticle}
               likeCount={likeCount}
               dislikeCount={dislikeCount}
+              commentLoadingTypes={[blogAction.COMMENT_ON_ARTICLE]}
+              likeLoadingTypes={[blogAction.LIKE_ARTICLE]}
+              dislikeLoadingTypes={[blogAction.DISLIKE_ARTICLE]}
+              deleteCommentLoadingTypes={[blogAction.DELETE_COMMENT]}
+              relatedArticle={relatedArticle}
             />
           </Col>
           <Col xs={24} sm={24} md={6} lg={6} xl={6}>
@@ -102,7 +122,7 @@ function ArticleDetailedPage(props) {
           </Col>
         </Row>
       </div>
-    </Spin>
+    </LoadingGrid>
   );
 }
 

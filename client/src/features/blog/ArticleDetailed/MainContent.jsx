@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import { Divider, Comment, Avatar, Button, Space } from 'antd';
+import { Divider, Comment, Avatar, Space } from 'antd';
 import IconText from '../../../app/layout/common/IconText';
 import { formatDate } from '../../../app/utils/helper';
 import {
@@ -11,23 +11,25 @@ import {
 import { UserCirCleIcon } from '../../../app/layout/common/Icons';
 import Comments from './Comments';
 import CommentEditor from './CommentEditor';
-import { actionTypes } from '../../../app/utils/config';
 import Image from '../../../app/layout/common/Image';
+import LoadingButton from '../../../app/layout/common/loading/LoadingButton';
+import RelatedArticles from '../Articles/RelatedArticles/RelatedArticles';
 
 function MainContent({
   article,
   submitComment,
-  submitting,
   authUser,
   authenticated,
-  loading,
-  loadingType,
-  elmId,
   deleteComment,
   likeCount,
   dislikeCount,
   likeArticle,
   dislikeArticle,
+  commentLoadingTypes,
+  likeLoadingTypes,
+  dislikeLoadingTypes,
+  deleteCommentLoadingTypes,
+  relatedArticle,
 }) {
   const [commentText, setCommentText] = useState('');
 
@@ -37,11 +39,6 @@ function MainContent({
     submitComment(commentText);
     setCommentText('');
   };
-
-  const likeLoading =
-    loadingType === actionTypes.blog.LIKE_ARTICLE ? loading : false;
-  const dislikeLoading =
-    loadingType === actionTypes.blog.DISLIKE_ARTICLE ? loading : false;
 
   return (
     <div className='article-detail__main'>
@@ -78,24 +75,24 @@ function MainContent({
         <Fragment>
           <div className='article-detail__main-like'>
             <Space>
-              <Button
+              <LoadingButton
                 className='btn btn--success'
                 type='primary'
                 icon={<LikeFilled />}
                 onClick={() => likeArticle(article._id)}
-                loading={likeLoading}
+                loadingTypes={likeLoadingTypes}
               >
                 Like this article ({likeCount})
-              </Button>
-              <Button
+              </LoadingButton>
+              <LoadingButton
+                loadingTypes={dislikeLoadingTypes}
                 type='primary'
                 danger
                 icon={<DislikeFilled />}
                 onClick={() => dislikeArticle(article._id)}
-                loading={dislikeLoading}
               >
                 Dislike this article ({dislikeCount})
-              </Button>
+              </LoadingButton>
             </Space>
           </div>
           <Divider />
@@ -104,10 +101,8 @@ function MainContent({
               <Comments
                 comments={article.comments}
                 authUserId={authUser._id}
-                loading={loading}
-                loadingType={loadingType}
-                elmId={elmId}
                 deleteComment={deleteComment}
+                deleteCommentLoadingTypes={deleteCommentLoadingTypes}
               />
             )}
             <Comment
@@ -116,8 +111,8 @@ function MainContent({
                 <CommentEditor
                   onChange={handleChange}
                   onSubmit={handleSubmit}
-                  submitting={submitting}
                   value={commentText}
+                  loadingTypes={commentLoadingTypes}
                 />
               }
             />
@@ -126,7 +121,14 @@ function MainContent({
         </Fragment>
       )}
 
-      <div className='article-detail__main-related-post'>related post</div>
+      {relatedArticle.length > 0 && (
+        <Fragment>
+          <Divider />
+          <div className='article-detail__main-related-post'>
+            <RelatedArticles articles={relatedArticle} deviceType='desktop' />
+          </div>
+        </Fragment>
+      )}
     </div>
   );
 }

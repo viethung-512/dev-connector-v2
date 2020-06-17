@@ -1,24 +1,55 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Space } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Button, Space, PageHeader } from 'antd';
+import { breadcrumbRenderItem } from '../../../../app/utils/helper';
 
 function HeaderTop({ updateProfile, profile, isAuth }) {
+  const routes = isAuth
+    ? [
+        {
+          path: 'dashboard',
+          breadcrumbName: 'Dashboard',
+        },
+        {
+          path: 'developers',
+          breadcrumbName: 'Developers',
+        },
+        {
+          path: profile ? `/profile/${profile.user._id}` : '',
+          breadcrumbName: profile ? profile.user.name : '',
+        },
+      ]
+    : [
+        {
+          path: 'developers',
+          breadcrumbName: 'Developers',
+        },
+        {
+          path: profile ? `/profile/${profile.user._id}` : '',
+          breadcrumbName: profile ? profile.user.name : '',
+        },
+      ];
   return (
-    <Space>
-      <Link to='/developers'>
-        <Button type='default' icon={<ArrowLeftOutlined />}>
-          Back To Profiles
-        </Button>
-      </Link>
-      {isAuth && profile && (
-        <Fragment>
-          <Button type='link' className='btn btn--dark' onClick={updateProfile}>
-            Edit Profile
-          </Button>
-        </Fragment>
-      )}
-    </Space>
+    <Fragment>
+      <PageHeader
+        style={{ paddingLeft: 0, paddingRight: 0 }}
+        title={
+          <Space>
+            {isAuth && profile && (
+              <Fragment>
+                <Button
+                  type='link'
+                  className='btn btn--dark'
+                  onClick={updateProfile}
+                >
+                  Edit Profile
+                </Button>
+              </Fragment>
+            )}
+          </Space>
+        }
+        breadcrumb={{ itemRender: breadcrumbRenderItem, routes }}
+      />
+    </Fragment>
   );
 }
 

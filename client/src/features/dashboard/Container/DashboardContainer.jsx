@@ -9,9 +9,8 @@ function DashboardContainer({
   addEducation,
   deleteExperience,
   deleteEducation,
-  exDeleteLoading,
-  edDeleteLoading,
-  elmId,
+  exLoadingTypes,
+  edLoadingTypes,
 }) {
   return (
     <div className='dashboard-container'>
@@ -19,16 +18,14 @@ function DashboardContainer({
         experience={experience}
         addExperience={addExperience}
         deleteExperience={deleteExperience}
-        loading={exDeleteLoading}
-        exId={elmId}
+        exLoadingTypes={exLoadingTypes}
       />
 
       <Education
         education={education}
         addEducation={addEducation}
         deleteEducation={deleteEducation}
-        loading={edDeleteLoading}
-        edId={elmId}
+        edLoadingTypes={edLoadingTypes}
       />
     </div>
   );

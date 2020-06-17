@@ -12,7 +12,7 @@ const app = express();
 connectDB();
 
 AwakeHeroku.add({
-  url: 'https://secure-beyond-57876.herokuapp.com/',
+  // url: 'https://secure-beyond-57876.herokuapp.com/',
 });
 
 app.use(express.json({ extended: false }));

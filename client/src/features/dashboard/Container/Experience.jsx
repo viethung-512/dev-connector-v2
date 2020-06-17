@@ -2,17 +2,23 @@ import React, { Fragment } from 'react';
 import { Table, Typography, Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { formatRowData } from '../../../app/utils/helper';
+import LoadingButton from '../../../app/layout/common/loading/LoadingButton';
 
 const { Title, Text } = Typography;
 
-const ExperienceActions = ({ deleteExperience, deleteLoading }) => (
-  <Button
+const ExperienceActions = ({
+  deleteExperience,
+  exLoadingTypes,
+  loadingElm,
+}) => (
+  <LoadingButton
     type='primary'
     danger
     shape='circle'
     icon={<DeleteOutlined />}
     onClick={deleteExperience}
-    loading={deleteLoading}
+    loadingTypes={exLoadingTypes}
+    loadingElm={loadingElm}
   />
 );
 
@@ -20,8 +26,7 @@ function Experience({
   experience,
   addExperience,
   deleteExperience,
-  loading,
-  exId,
+  exLoadingTypes,
 }) {
   const columns = [
     {
@@ -44,7 +49,8 @@ function Experience({
       render: item => (
         <ExperienceActions
           deleteExperience={() => deleteExperience(item._id)}
-          deleteLoading={item._id === exId ? loading : false}
+          exLoadingTypes={exLoadingTypes}
+          loadingElm={item._id}
         />
       ),
     },

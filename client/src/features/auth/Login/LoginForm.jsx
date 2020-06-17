@@ -3,10 +3,13 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Button, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+
 import { openModal } from '../../modal/modal.actions';
 import { login } from '../auth.actions';
 import { asyncActionClear } from '../../async/async.actions';
 import { actionTypes } from '../../../app/utils/config';
+
+import LoadingButton from '../../../app/layout/common/loading/LoadingButton';
 
 const { Text } = Typography;
 
@@ -15,7 +18,7 @@ function LoginForm(props) {
   const history = useHistory();
   const [form] = Form.useForm();
 
-  const { loading, errors, type } = useSelector(state => state.async);
+  const { errors } = useSelector(state => state.async);
 
   useEffect(() => {
     dispatch(asyncActionClear());
@@ -38,12 +41,6 @@ function LoginForm(props) {
     dispatch(login(userCredentials, history));
   };
   const signUp = () => dispatch(openModal('Register'));
-
-  const loginLoading = type === authAction.LOGIN ? loading : false;
-  const getAuthProfileLoading =
-    type === profileAction.GET_PROFILE ? loading : false;
-
-  const loginFormLoading = loginLoading || getAuthProfileLoading;
 
   return (
     <Form form={form} onFinish={handleSubmit} autoComplete='off'>
@@ -69,14 +66,14 @@ function LoginForm(props) {
         </Form.Item>
       )}
       <Form.Item>
-        <Button
+        <LoadingButton
+          loadingTypes={[authAction.LOGIN, profileAction.GET_PROFILE]}
           type='primary'
           style={{ width: '100%' }}
           htmlType='submit'
-          loading={loginFormLoading}
         >
           Login
-        </Button>
+        </LoadingButton>
       </Form.Item>
       <Form.Item>
         <Text

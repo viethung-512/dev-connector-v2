@@ -5,8 +5,9 @@ import {
   LIKE_ARTICLE,
   DISLIKE_ARTICLE,
   COMMENT_ON_ARTICLE,
-  DELETE_COMMENT,
+  DELETE_ARTICLE_COMMENT,
   SET_MOST_VIEW_ARTICLES,
+  SET_RELATED_ARTICLES,
 } from './article.constants';
 
 const articleReducerInitialState = {
@@ -23,6 +24,7 @@ const articleReducerInitialState = {
     nextPage: null,
   },
   mostView: [],
+  related: [],
 };
 const articleReducer = (
   state = articleReducerInitialState,
@@ -47,6 +49,11 @@ const articleReducer = (
         ...state,
         mostView: payload.articles,
       };
+    case SET_RELATED_ARTICLES:
+      return {
+        ...state,
+        related: payload.articles,
+      };
     case LIKE_ARTICLE:
     case DISLIKE_ARTICLE:
     case COMMENT_ON_ARTICLE:
@@ -60,7 +67,7 @@ const articleReducer = (
         },
         current: payload.article,
       };
-    case DELETE_COMMENT:
+    case DELETE_ARTICLE_COMMENT:
       return {
         ...state,
         current: {

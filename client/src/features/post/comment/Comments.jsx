@@ -1,18 +1,15 @@
 import React from 'react';
 import { List } from 'antd';
 import Item from '../Item';
-import { actionTypes } from '../../../app/utils/config';
 
 function Comments({
   comments,
   authUser,
   deleteComment,
-  loading,
-  loadingType,
-  loadingElm,
+  likeLoadingTypes,
+  unlikeLoadingTypes,
+  deleteLoadingTypes,
 }) {
-  const { post: postAction } = actionTypes;
-
   return (
     <div className='postpage__posts'>
       <List
@@ -25,12 +22,9 @@ function Comments({
               type='comment'
               authUser={authUser}
               deleteComment={deleteComment}
-              deleteLoading={
-                loadingType === postAction.DELETE_COMMENT &&
-                loadingElm === comment._id
-                  ? loading
-                  : false
-              }
+              likeLoadingTypes={likeLoadingTypes}
+              unlikeLoadingTypes={unlikeLoadingTypes}
+              deleteLoadingTypes={deleteLoadingTypes}
             />
           </List.Item>
         )}

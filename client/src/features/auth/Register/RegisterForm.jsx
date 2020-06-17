@@ -2,9 +2,13 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Button, Typography } from 'antd';
+
 import { openModal } from '../../modal/modal.actions';
 import { register } from '../auth.actions';
 import { asyncActionClear } from '../../async/async.actions';
+import { actionTypes } from '../../../app/utils/config';
+
+import LoadingButton from '../../../app/layout/common/loading/LoadingButton';
 
 const { Text } = Typography;
 
@@ -12,7 +16,7 @@ function RegisterForm(props) {
   const dispatch = useDispatch();
   const history = useHistory();
   const [form] = Form.useForm();
-  const { loading, errors } = useSelector(state => state.async);
+  const { errors } = useSelector(state => state.async);
 
   useEffect(() => {
     dispatch(asyncActionClear());
@@ -36,6 +40,9 @@ function RegisterForm(props) {
   const handleSubmit = userCredentials =>
     dispatch(register(userCredentials, history));
   const login = () => dispatch(openModal('Login'));
+
+  const authAction = actionTypes.auth;
+  const profileAction = actionTypes.profile;
 
   return (
     <Form form={form} onFinish={handleSubmit} autoComplete='off'>
@@ -79,14 +86,14 @@ function RegisterForm(props) {
         </Form.Item>
       )}
       <Form.Item>
-        <Button
+        <LoadingButton
           type='primary'
           style={{ width: '100%' }}
           htmlType='submit'
-          loading={loading}
+          loadingTypes={[authAction.REGISTER, profileAction.GET_PROFILE]}
         >
           Register
-        </Button>
+        </LoadingButton>
       </Form.Item>
       <Form.Item>
         <Text

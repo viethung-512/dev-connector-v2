@@ -13,9 +13,10 @@ import {
   CLEAR_ARTICLE,
   LIKE_ARTICLE,
   COMMENT_ON_ARTICLE,
-  DELETE_COMMENT,
+  DELETE_ARTICLE_COMMENT,
   DELETE_ARTICLE,
   SET_MOST_VIEW_ARTICLES,
+  SET_RELATED_ARTICLES,
 } from './article.constants';
 
 const { blog: blogActions } = actionTypes;
@@ -137,6 +138,22 @@ export const getArticles = (
   }
 };
 
+export const getRelatedArticles = articleId => async dispatch => {
+  dispatch(asyncActionStart(blogActions.GET_ARTICLES));
+
+  try {
+    const response = await axios.get(`/api/article/related/${articleId}`);
+    const { articles } = response.data;
+
+    dispatch({ type: SET_RELATED_ARTICLES, payload: { articles } });
+    dispatch(asyncActionFinish());
+  } catch (err) {
+    console.log(err);
+    dispatch(asyncActionError());
+    toastr.error('Oops', 'Some thing went wrong, please try again');
+  }
+};
+
 export const getArticleById = id => async dispatch => {
   dispatch(asyncActionStart(blogActions.GET_ARTICLE, id));
 
@@ -223,12 +240,12 @@ export const commentOnArticle = (id, comment) => async dispatch => {
 };
 
 export const deleteComment = (commentId, articleId) => async dispatch => {
-  dispatch(asyncActionStart(blogActions.DELETE_COMMENT, commentId));
+  dispatch(asyncActionStart(blogActions.DELETE_ARTICLE_COMMENT, commentId));
 
   try {
     await axios.delete(`/api/article/comment/${articleId}/${commentId}`);
 
-    dispatch({ type: DELETE_COMMENT, payload: { commentId } });
+    dispatch({ type: DELETE_ARTICLE_COMMENT, payload: { commentId } });
     dispatch(asyncActionFinish());
     toastr.success('Success', 'Comment deleted');
   } catch (err) {

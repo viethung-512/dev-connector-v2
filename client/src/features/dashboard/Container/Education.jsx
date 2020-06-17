@@ -2,17 +2,19 @@ import React, { Fragment } from 'react';
 import { Typography, Table, Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { formatRowData } from '../../../app/utils/helper';
+import LoadingButton from '../../../app/layout/common/loading/LoadingButton';
 
 const { Title, Text } = Typography;
 
-const EducationActions = ({ deleteEducation, deleteLoading }) => (
-  <Button
+const EducationActions = ({ deleteEducation, edLoadingTypes, loadingElm }) => (
+  <LoadingButton
     type='primary'
     danger
     shape='circle'
     icon={<DeleteOutlined />}
     onClick={deleteEducation}
-    loading={deleteLoading}
+    loadingTypes={edLoadingTypes}
+    loadingElm={loadingElm}
   />
 );
 
@@ -20,8 +22,7 @@ function Education({
   education,
   addEducation,
   deleteEducation,
-  loading,
-  edId,
+  edLoadingTypes,
 }) {
   const columns = [
     {
@@ -44,7 +45,9 @@ function Education({
       render: item => (
         <EducationActions
           deleteEducation={() => deleteEducation(item._id)}
-          deleteLoading={item._id === edId ? loading : false}
+          edLoadingTypes={edLoadingTypes}
+          // loadingElm={item._id}
+          loadingElm={item._id}
         />
       ),
     },

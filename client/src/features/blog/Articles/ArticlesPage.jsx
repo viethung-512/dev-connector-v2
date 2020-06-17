@@ -3,7 +3,7 @@ import './style.css';
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import queryString from 'query-string';
-import { Row, Col, Typography, Spin } from 'antd';
+import { Row, Col, Typography, PageHeader } from 'antd';
 import ArticleList from './ArticleList';
 import {
   clearArticle,
@@ -18,7 +18,8 @@ import { pageTypes, actionTypes } from '../../../app/utils/config';
 import AuthorSidebar from '../AuthorSidebar';
 import { getProfile, getAuthProfile } from '../../profile/profile.actions';
 import Sidebar from './Sidebar';
-import { LoadingIcon } from '../../../app/layout/common/Icons';
+import LoadingGrid from '../../../app/layout/common/loading/LoadingGrid';
+import { breadcrumbRenderItem } from '../../../app/utils/helper';
 
 const { Title } = Typography;
 
@@ -30,11 +31,13 @@ const ArticlesPage = ({ pageType }) => {
   const currentProfile = useSelector(state => state.profile.current);
   const authUserId = useSelector(state => state.auth.user._id);
   const { articles } = useSelector(state => state.blog);
-  const { loading, type, elmId } = useSelector(state => state.async);
+  const { loading, type } = useSelector(state => state.async);
   const { userId } = useParams();
 
   useEffect(() => {
     dispatch(getMostViewArticle());
+
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -89,17 +92,34 @@ const ArticlesPage = ({ pageType }) => {
     dispatch(getArticles(pageType, null, page, pageSize));
   };
 
-  const getArticlesLoading = actionTypes.blog.GET_ARTICLES ? loading : false;
+  const routes = [
+    {
+      path: authUserId ? 'dashboard' : 'developers',
+      breadcrumbName: authUserId ? 'Dashboard' : 'Developers',
+    },
+    {
+      path: 'blog',
+      breadcrumbName: 'Blog',
+    },
+  ];
 
-  const getMostViewLoading =
-    type === actionTypes.blog.GET_MOST_VIEW ? loading : false;
-
-  const articlesPageLoading = getArticlesLoading || getMostViewLoading;
+  const blogAction = actionTypes.blog;
+  const authAction = actionTypes.auth;
 
   return (
     <div className='articles-page'>
-      <Title className='primary articles-page__title'>Blog</Title>
-      <Spin spinning={articlesPageLoading} indicator={LoadingIcon}>
+      <PageHeader
+        style={{ paddingLeft: 0, paddingRight: 0 }}
+        title={<Title className='primary article-detail__title'>Blog</Title>}
+        breadcrumb={{ itemRender: breadcrumbRenderItem, routes }}
+      />
+      <LoadingGrid
+        loadingTypes={[
+          blogAction.GET_ARTICLES,
+          blogAction.GET_MOST_VIEW,
+          authAction.GET_AUTH_USER,
+        ]}
+      >
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={24} md={18} lg={18} xl={18}>
             <ArticleList
@@ -108,7 +128,6 @@ const ArticlesPage = ({ pageType }) => {
               likeArticle={handleLikeArticle}
               dislikeArticle={handleDislikeArticle}
               loadingType={type}
-              loadingElm={elmId}
               authUserId={authUserId}
               total={articles.totalDocs}
               handleChangePage={handleChangePage}
@@ -128,7 +147,7 @@ const ArticlesPage = ({ pageType }) => {
             )}
           </Col>
         </Row>
-      </Spin>
+      </LoadingGrid>
     </div>
   );
 };

@@ -109,6 +109,48 @@ const getUserArticles = async (req, res, next) => {
   }
 };
 
+const getRelatedArticles = async (req, res, next) => {
+  const { articleId } = req.params;
+
+  try {
+    const article = await Article.findById(articleId);
+
+    if (!article || !article.enabled) {
+      return next({ status: 400, message: 'Article not found' });
+    }
+
+    const authorId = article.user;
+    const response = await Article.paginate(
+      { enabled: true, user: authorId },
+      {
+        limit: 4,
+        populate: [
+          {
+            path: 'user',
+            select: ['name', 'avatar'],
+          },
+          {
+            path: 'comments.user',
+            select: ['name', 'avatar'],
+          },
+        ],
+        sort: { date: -1 },
+      }
+    );
+    const articles = response.docs.filter(
+      article => article._id.toString() !== articleId
+    );
+
+    return res.json({ articles });
+  } catch (err) {
+    if (err.name == 'CastError') {
+      return next({ status: 400, message: 'User not found' });
+    }
+
+    return next({ status: 500 });
+  }
+};
+
 const getArticleById = async (req, res, next) => {
   const { id } = req.params;
 
@@ -387,6 +429,7 @@ module.exports = {
   getAllArticle,
   getAuthArticle,
   getUserArticles,
+  getRelatedArticles,
   getArticleById,
   createArticle,
   updateArticle,

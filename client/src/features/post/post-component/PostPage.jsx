@@ -17,7 +17,7 @@ function PostPage(props) {
   const dispatch = useDispatch();
   const { posts } = useSelector(state => state.post);
   const { user: authUser } = useSelector(state => state.auth);
-  const { loading, type, elmId } = useSelector(state => state.async);
+  const { loading, type } = useSelector(state => state.async);
 
   useEffect(() => {
     dispatch(getPosts());
@@ -28,7 +28,6 @@ function PostPage(props) {
   const { post: postAction } = actionTypes;
 
   const loadingPosts = type === postAction.GET_POSTS ? loading : false;
-  const createPostLoading = type === postAction.CREATE_POST ? loading : false;
   const postPageLoading = loadingPosts;
 
   const handleCreatePost = post => {
@@ -46,7 +45,7 @@ function PostPage(props) {
         placeholder='Create a post'
         title='Say Something...'
         onSubmit={handleCreatePost}
-        loading={createPostLoading}
+        createLoadingTypes={[postAction.CREATE_POST]}
       />
       <Posts
         posts={posts}
@@ -55,9 +54,9 @@ function PostPage(props) {
         likePost={handleLikePost}
         unlikePost={handleUnlikePost}
         deletePost={handleDeletePost}
-        loading={loading}
-        loadingType={type}
-        loadingElm={elmId}
+        likeLoadingTypes={[postAction.LIKE_POST]}
+        unlikeLoadingTypes={[postAction.UNLIKE_POST]}
+        deleteLoadingTypes={[postAction.DELETE_POST]}
       />
     </div>
   );

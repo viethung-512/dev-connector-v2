@@ -16,6 +16,7 @@ import Image from '../../../../app/layout/common/Image';
 import ArticleAuthor from './ArticleAuthor';
 import { formatDate } from '../../../../app/utils/helper';
 import IconText from '../../../../app/layout/common/IconText';
+import LoadingButton from '../../../../app/layout/common/loading/LoadingButton';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -25,9 +26,9 @@ function ArticleItem({
   likeArticle,
   dislikeArticle,
   deleteArticle,
-  likeLoading,
-  dislikeLoading,
-  deleteLoading,
+  likeLoadingTypes,
+  dislikeLoadingTypes,
+  deleteLoadingTypes,
   likeCount,
   dislikeCount,
   commentCount,
@@ -55,12 +56,13 @@ function ArticleItem({
               <Link to={`/blog/edit/${article._id}`} style={{ width: '100%' }}>
                 <Button type='link' icon={<EditOutlined />} />
               </Link>,
-              <Button
+              <LoadingButton
                 style={{ width: '100%' }}
                 type='link'
                 danger
                 icon={<DeleteOutlined />}
-                loading={deleteLoading}
+                loadingTypes={deleteLoadingTypes}
+                loadingElm={article._id}
                 onClick={deleteArticle}
               />,
             ]
@@ -102,26 +104,28 @@ function ArticleItem({
             </Skeleton>
             <div className='article-item__container-content'>
               <Space>
-                <Button
+                <LoadingButton
                   type='link'
                   icon={isLiked ? <LikeFilled /> : <LikeOutlined />}
-                  loading={likeLoading}
                   onClick={likeArticle}
                   disabled={isLiked}
+                  loadingTypes={likeLoadingTypes}
+                  loadingElm={article._id}
                 >
                   {' '}
                   {likeCount}
-                </Button>
-                <Button
+                </LoadingButton>
+                <LoadingButton
                   type='link'
                   icon={isDisliked ? <DislikeFilled /> : <DislikeOutlined />}
-                  loading={dislikeLoading}
                   onClick={dislikeArticle}
                   disabled={isDisliked}
+                  loadingTypes={dislikeLoadingTypes}
+                  loadingElm={article._id}
                 >
                   {' '}
                   {dislikeCount}
-                </Button>
+                </LoadingButton>
                 <Link to={`/blog/${article._id}`}>
                   <Button type='link' icon={<CommentOutlined />}>
                     {' '}

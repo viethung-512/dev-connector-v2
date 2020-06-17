@@ -1,11 +1,17 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Typography, Space, Button } from 'antd';
-import { DeleteOutlined, LikeFilled } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  HeartOutlined,
+  HeartFilled,
+  MessageOutlined,
+} from '@ant-design/icons';
 import { formatDate } from '../../app/utils/helper';
 import { defaultName } from '../../app/utils/config';
 
 import Avatar from '../../app/layout/common/Avatar';
+import LoadingButton from '../../app/layout/common/loading/LoadingButton';
 
 const { Text, Paragraph } = Typography;
 
@@ -14,13 +20,13 @@ function Item({
   type,
   authUser,
   onlyShowDescription = false,
-  likeLoading,
-  unlikeLoading,
-  deleteLoading,
   likePost,
   unlikePost,
   deletePost,
   deleteComment,
+  deleteLoadingTypes,
+  likeLoadingTypes,
+  unlikeLoadingTypes,
 }) {
   const isOwn = item.user._id === authUser._id;
   const isLiked =
@@ -80,11 +86,14 @@ function Item({
                 <Space>
                   {type === 'post' && (
                     <Fragment>
-                      <Button
+                      <LoadingButton
+                        loadingElm={item._id}
+                        loadingTypes={
+                          isLiked ? unlikeLoadingTypes : likeLoadingTypes
+                        }
                         size='large'
-                        type={isLiked ? 'primary' : 'default'}
-                        icon={<LikeFilled />}
-                        loading={isLiked ? unlikeLoading : likeLoading}
+                        type='link'
+                        icon={isLiked ? <HeartFilled /> : <HeartOutlined />}
                         onClick={
                           type === 'post'
                             ? isLiked
@@ -93,26 +102,30 @@ function Item({
                             : null
                         }
                       >
+                        {' '}
                         {item.likes.length === 0 ? '' : item.likes.length}
-                      </Button>
+                      </LoadingButton>
                       <Link to={`/posts/${item._id}`}>
-                        <Button type='primary' size='large'>
-                          Discussion{' '}
-                          <span className='discussion-number'>
-                            {item.comments.length}
-                          </span>
+                        <Button
+                          type='link'
+                          size='large'
+                          icon={<MessageOutlined />}
+                        >
+                          {' '}
+                          {item.comments.length}
                         </Button>
                       </Link>
                     </Fragment>
                   )}
 
                   {isOwn && (
-                    <Button
+                    <LoadingButton
+                      loadingTypes={deleteLoadingTypes}
+                      loadingElm={item._id}
                       size='large'
                       danger
-                      type='primary'
+                      type='link'
                       icon={<DeleteOutlined />}
-                      loading={deleteLoading}
                       onClick={
                         type === 'post' ? handleDeletePost : handleDeleteComment
                       }

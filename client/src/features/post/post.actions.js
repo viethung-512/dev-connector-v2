@@ -13,7 +13,7 @@ import {
   UNLIKE_POST,
   DELETE_POST,
   COMMENT_ON_POST,
-  DELETE_COMMENT,
+  DELETE_POST_COMMENT,
 } from './post.constants';
 import { toastr } from 'react-redux-toastr';
 import { actionTypes } from '../../app/utils/config';
@@ -30,8 +30,8 @@ export const getPosts = () => async dispatch => {
     dispatch({ type: SET_POSTS, payload: { posts } });
     dispatch(asyncActionFinish());
   } catch (err) {
-    console.log(err.response.data);
-    dispatch(asyncActionError(err.response.data));
+    console.log(err);
+    dispatch(asyncActionError());
   }
 };
 
@@ -123,7 +123,7 @@ export const commentOnPost = (comment, postId) => async dispatch => {
     dispatch({ type: COMMENT_ON_POST, payload: { post } });
     dispatch(asyncActionFinish());
   } catch (err) {
-    dispatch(asyncActionError(err.response.data));
+    dispatch(asyncActionError());
     toastr.error('Oops', 'Some thing when wrong, please try again');
   }
 };
@@ -135,10 +135,11 @@ export const deleteComment = (commentId, postId) => async dispatch => {
     const res = await axios.delete(`/api/post/comment/${postId}/${commentId}`);
     const { post } = res.data;
 
-    dispatch({ type: DELETE_COMMENT, payload: { post } });
+    dispatch({ type: DELETE_POST_COMMENT, payload: { post } });
     dispatch(asyncActionFinish());
   } catch (err) {
-    dispatch(asyncActionError(err.response.data));
+    dispatch(asyncActionError());
+    console.log(err);
     toastr.error('Oops', 'Some thing when wrong, please try again');
   }
 };

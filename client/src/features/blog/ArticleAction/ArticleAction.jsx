@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './style.css';
-import { Form, Input, Upload, Button, Space, Spin, Typography } from 'antd';
+import { Form, Input, Upload, Button, Space, Typography } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import TextEditor from '../../../app/layout/common/TextEditor/TextEditor';
 import { useParams, useHistory } from 'react-router-dom';
@@ -12,8 +12,9 @@ import {
   createArticle,
 } from '../article.actions';
 import { actionTypes } from '../../../app/utils/config';
-import { LoadingIcon } from '../../../app/layout/common/Icons';
 import shortid from 'shortid';
+import LoadingButton from '../../../app/layout/common/loading/LoadingButton';
+import LoadingGrid from '../../../app/layout/common/loading/LoadingGrid';
 
 const { Title } = Typography;
 
@@ -24,7 +25,6 @@ function ArticleAction(props) {
   const history = useHistory();
   const quillRef = useRef(null);
   const currentArticle = useSelector(state => state.blog.current);
-  const { loading, type } = useSelector(state => state.async);
   const [fileList, setFileList] = useState([]);
   const [content, setContent] = useState('');
 
@@ -96,13 +96,10 @@ function ArticleAction(props) {
     return Promise.resolve();
   };
 
-  const getArticleLoading =
-    type === actionTypes.blog.GET_ARTICLE ? loading : false;
-  const createUpdateArticleLoading =
-    type === actionTypes.blog.CREATE_UPDATE_ARTICLE ? loading : false;
+  const blogAction = actionTypes.blog;
 
   return (
-    <Spin indicator={LoadingIcon} spinning={getArticleLoading}>
+    <LoadingGrid loadingTypes={[blogAction.GET_ARTICLE]}>
       <Title className='primary article-actions__title'>
         {articleId && currentArticle
           ? `Edit article ${currentArticle.title}`
@@ -152,14 +149,14 @@ function ArticleAction(props) {
 
         <Form.Item>
           <Space>
-            <Button
+            <LoadingButton
+              loadingTypes={[blogAction.CREATE_UPDATE_ARTICLE]}
               type='primary'
               className='btn btn--success'
               htmlType='submit'
-              loading={createUpdateArticleLoading}
             >
               Submit
-            </Button>
+            </LoadingButton>
             <Button
               type='default'
               className='btn btn--default'
@@ -170,7 +167,7 @@ function ArticleAction(props) {
           </Space>
         </Form.Item>
       </Form>
-    </Spin>
+    </LoadingGrid>
   );
 }
 
