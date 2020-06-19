@@ -39,7 +39,7 @@ npm install
 npm run dev (start project with development mode)
 ```
 ## 2. Demo
-This is the demo: [Dev-Connector](https://secure-beyond-57876.herokuapp.com/)
+This is the demo: [Dev-Connector](https://thawing-caverns-48416.herokuapp.com/)
 
 This project was made by [Ngô Việt Hưng](https://github.com/viethung-512).
 
